@@ -5,9 +5,6 @@ import java.util.Collection;
 
 import javax.inject.Named;
 
-import kmu.itsp.score.dao.entity.UserStatus;
-import kmu.itsp.score.dao.inter.UserInfoDao;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
