@@ -139,6 +139,15 @@ public class CScoringServiceImpl implements ScoringService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean registResult(ScoringRequestInfoBean requestInfo,
+			List<ScoringResultBean> scoringResults) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
 	
 	
 }
