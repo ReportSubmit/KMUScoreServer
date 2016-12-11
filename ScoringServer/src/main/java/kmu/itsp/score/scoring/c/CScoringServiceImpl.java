@@ -3,14 +3,17 @@ package kmu.itsp.score.scoring.c;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import kmu.itsp.score.core.process.IProcessService;
 import kmu.itsp.score.core.util.FileManager;
 import kmu.itsp.score.core.util.ScoreUtil;
-import kmu.itsp.score.scoring.CompileResultBean;
-import kmu.itsp.score.scoring.ProbResultBean;
-import kmu.itsp.score.scoring.ScoreResultBean;
+import kmu.itsp.score.scoring.ScoringRequestInfoBean;
+import kmu.itsp.score.scoring.ScoringResultBean;
 import kmu.itsp.score.scoring.ScoringService;
+import kmu.itsp.score.scoring.temp.CompileResultBean;
+import kmu.itsp.score.scoring.temp.ProbResultBean;
+import kmu.itsp.score.scoring.temp.ScoreResultBean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -87,7 +90,7 @@ public class CScoringServiceImpl implements ScoringService{
 
 					// run program
 					int status = processService
-							.runExcuteFile(ansInputFile, result.getUuid(),
+							.runExcuteFile(ansInputFile, result.getFileName(),
 									processService.getExcuteDirPath());
 					// set program status
 					
@@ -130,6 +133,21 @@ public class CScoringServiceImpl implements ScoringService{
 		
 		return scoreResult;
 	}
+
+	@Override
+	public List<ScoringResultBean> scoringSourceFile(ScoringRequestInfoBean requestInfo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean registResult(ScoringRequestInfoBean requestInfo,
+			List<ScoringResultBean> scoringResults) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
 	
 	
 }

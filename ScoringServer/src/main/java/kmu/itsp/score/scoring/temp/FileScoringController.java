@@ -1,4 +1,4 @@
-package kmu.itsp.score.scoring;
+package kmu.itsp.score.scoring.temp;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,6 +6,7 @@ import java.io.IOException;
 import kmu.itsp.score.core.process.IProcessService;
 import kmu.itsp.score.core.util.FileManager;
 import kmu.itsp.score.core.util.ScoreUtil;
+import kmu.itsp.score.scoring.ScoringService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -56,7 +57,7 @@ public class FileScoringController {
 							inputSuffix);
 				}
 				int status = processService.runExcuteFile(inputFile,
-						result.getUuid(), processService.getExcuteDirPath());
+						result.getFileName(), processService.getExcuteDirPath());
 				complieResult.setStatus(status);
 				complieResult.setComplieResultByStatus(processService
 						.getSuccessResult(), ScoreUtil.deletePathInStr(

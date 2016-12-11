@@ -4,6 +4,7 @@ import java.util.List;
 
 import kmu.itsp.score.problem.entity.AnswerEntity;
 import kmu.itsp.score.problem.entity.ProblemEntity;
+import kmu.itsp.score.problem.entity.ProblemInputEntity;
 
 public interface ProblemDAO {
 	
@@ -15,9 +16,8 @@ public interface ProblemDAO {
 	boolean deleteProblem(int problemIdx);
 	boolean deleteAllProblemInProject(int projectIdx);
 	int getLastProblemIdx();
-	List<AnswerEntity> getAnswerList(int problemIdx);
-
-	
+	List<AnswerEntity> findAnswerList(int problemIdx);
+	List<ProblemInputEntity> findInputList(int problemIdx);
 	
 }
 

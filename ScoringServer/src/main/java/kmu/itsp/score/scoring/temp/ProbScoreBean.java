@@ -1,4 +1,4 @@
-package kmu.itsp.score.scoring;
+package kmu.itsp.score.scoring.temp;
 
 public class ProbScoreBean {
 	String probNum;

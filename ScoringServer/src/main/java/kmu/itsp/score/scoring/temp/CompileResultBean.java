@@ -1,11 +1,11 @@
-package kmu.itsp.score.scoring;
+package kmu.itsp.score.scoring.temp;
 
 import kmu.itsp.score.core.process.IProcessService;
 import kmu.itsp.score.core.util.ScoreUtil;
 
 public class CompileResultBean {
 	private int status;
-	private String uuid;
+	private String fileName;
 	private String message;
 	private String errorMsg;
 	private String successMsg;
@@ -14,10 +14,10 @@ public class CompileResultBean {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public CompileResultBean(int status, String uuid) {
+	public CompileResultBean(int status, String fileName) {
 		// TODO Auto-generated constructor stub
 		this.status = status;
-		this.uuid = uuid;
+		this.fileName = fileName;
 	}
 	
 	
@@ -58,12 +58,12 @@ public class CompileResultBean {
 		}
 	}
 	
-	public String getUuid() {
-		return uuid;
+	public String getFileName() {
+		return fileName;
 	}
 	
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 	
 	public int getStatus() {

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import kmu.itsp.score.scoring.ProbScoreBean;
+import kmu.itsp.score.scoring.temp.ProbScoreBean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

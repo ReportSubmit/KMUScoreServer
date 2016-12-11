@@ -129,7 +129,7 @@ public class ProblemDAOImpl implements ProblemDAO {
 	}
 
 	@Override
-	public List<AnswerEntity> getAnswerList(int problemIdx) {
+	public List<AnswerEntity> findAnswerList(int problemIdx) {
 		// TODO Auto-generated method stub
 		Criteria criteria = dao.getSession().createCriteria(AnswerEntity.class);
 
@@ -140,7 +140,23 @@ public class ProblemDAOImpl implements ProblemDAO {
 		for (int i = 0; i < answerList.size(); i++) {
 			System.out.println(answerList.get(i).getAnswer());
 		}
+		
 		return answerList;
+	}
+
+	@Override
+	public List<ProblemInputEntity> findInputList(int problemIdx) {
+		// TODO Auto-generated method stub
+		Criteria criteria = dao.getSession().createCriteria(ProblemInputEntity.class);
+
+		criteria.add(Restrictions.eq("problemIdx", problemIdx));
+
+		List<ProblemInputEntity> inputList = (List<ProblemInputEntity>) criteria.list();
+
+		for (int i = 0; i < inputList.size(); i++) {
+			System.out.println(inputList.get(i).getInput());
+		}
+		return inputList;
 	}
 
 }
