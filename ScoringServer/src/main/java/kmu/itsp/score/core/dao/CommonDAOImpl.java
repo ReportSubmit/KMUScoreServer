@@ -20,6 +20,7 @@ public abstract class CommonDAOImpl implements CommonDAO{
 			session=sessionFactory.getCurrentSession();			
 		} catch (HibernateException e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			session = sessionFactory.openSession();
 		}
 		

@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
-import kmu.itsp.score.scoring.ProbScoreBean;
-import kmu.itsp.score.scoring.ScoreResultBean;
 import kmu.itsp.score.scoring.ScoringService;
+import kmu.itsp.score.scoring.temp.ProbScoreBean;
+import kmu.itsp.score.scoring.temp.ScoreResultBean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

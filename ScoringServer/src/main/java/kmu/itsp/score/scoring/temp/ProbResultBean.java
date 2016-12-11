@@ -1,4 +1,4 @@
-package kmu.itsp.score.scoring;
+package kmu.itsp.score.scoring.temp;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -6,13 +6,14 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import kmu.itsp.score.core.process.IProcessService;
+import kmu.itsp.score.core.process.ProcessServiceFactory;
 import kmu.itsp.score.core.util.FileManager;
 import kmu.itsp.score.problem.entity.AnswerEntity;
 import kmu.itsp.score.problem.entity.ProblemEntity;
-import kmu.itsp.score.scoring.CompileResultBean;
+import kmu.itsp.score.problem.entity.ProblemInputEntity;
+import kmu.itsp.score.scoring.temp.CompileResultBean;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,14 +25,11 @@ public class ProblemServiceImpl implements ProblemService {
 
 	private @Value("${path.temp_dir_path}") String tempDirPath;
 
-	@Autowired
-	@Qualifier(value = "GccProcessService")
-	IProcessService processService;
-
 	@Override
 	@Transactional
 	public boolean registProblem(ProblemInfoBean problemInfo) {
 		// TODO Auto-generated method stub
+
 		int nextProblemIdx = dao.getLastProblemIdx() + 1;
 
 		if (!dao.addProblemEntity(problemInfo.getProjectIdx(),
@@ -48,8 +46,7 @@ public class ProblemServiceImpl implements ProblemService {
 		// insert input
 
 		// complie & excute source file
-		String suffix = ".c";
-		File file = FileManager.createStringToFile(tempDirPath, "", suffix);
+		File file = FileManager.createStringToFile(tempDirPath, "", "");
 
 		System.out.println(file.getAbsolutePath());
 
@@ -61,13 +58,16 @@ public class ProblemServiceImpl implements ProblemService {
 		}
 
 		try {
+			IProcessService processService = ProcessServiceFactory
+					.getInstance(problemInfo.getProjectIdx());
+
 			CompileResultBean compileResult = processService.complie(file);
 
 			if (compileResult.getStatus() == IProcessService.COMPILE_SUCCESS) {
 				String inputs[] = problemInfo.getInputValue();
 				for (int i = 0; i < inputs.length; i++) {
 					int status = processService.runExcuteFile(inputs[i],
-							compileResult.getUuid(),
+							compileResult.getFileName(),
 							processService.getExcuteDirPath());
 					System.out.println("status:" + status);
 
@@ -91,7 +91,6 @@ public class ProblemServiceImpl implements ProblemService {
 						System.out.println("TokenSize :" + tokenSize);
 
 						// insert answer
-
 						answerEntity.setAnswerLineNum(tokenSize);
 						answerEntity.setAnswerNo(i + 1);
 						answerEntity.setAnswer(successResult);
@@ -114,12 +113,29 @@ public class ProblemServiceImpl implements ProblemService {
 	}
 
 	@Override
+	@Transactional
 	public List<ProblemEntity> getProblemList(int projectIdx, int pageIdx,
 			int entitySize) {
 		// TODO Auto-generated method stub
 		List<ProblemEntity> problemList = dao.findProblemList(projectIdx,
 				pageIdx, entitySize);
 		return problemList;
+	}
+
+	@Override
+	@Transactional
+	public List<ProblemInputEntity> getInputList(int problemIdx) {
+		// TODO Auto-generated method stub
+		List<ProblemInputEntity> inputList = dao.findInputList(problemIdx);
+		return inputList;
+	}
+
+	@Override
+	@Transactional
+	public List<AnswerEntity> getAnswerList(int problemIdx) {
+		// TODO Auto-generated method stub
+		List<AnswerEntity> answerList = dao.findAnswerList(problemIdx);
+		return answerList;
 	}
 
 }
