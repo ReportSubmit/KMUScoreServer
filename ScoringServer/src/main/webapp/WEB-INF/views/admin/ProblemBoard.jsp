@@ -31,31 +31,43 @@
 <!-- sockjs 사용해서 나중에 progress bar 넣기 -->
 </head>
 <body>
+
+	<%@include file="../include/header.jsp"%>
+
 	<div class="container">
-		<div class="panel-group" id="accordion" role="tablist"
-			aria-multiselectable="true">
-			<c:forEach items="${problemList}" var="problem" varStatus="status">
-				<div class="panel panel-default">
-					<div class="panel-heading" role="tab" id="heading${status.count}">
-						<h4 class="panel-title">
-							<a data-toggle="collapse" data-parent="#accordion"
-								href="#collapse${status.count}" aria-expanded="true"
-								aria-controls="collapse${status.count}">
-								${problem.problemName} </a> <span style="float: right">&nbsp;<input
-								type="button" value="채점">
-							</span><span style="float: right"><input type="file"
-								name="sourceFile"></span>
-						</h4>
-					</div>
-					<div id="collapse${status.count}"
-						class="panel-collapse collapse <c:if test="${status.first}">in</c:if> "
-						role="tabpanel" aria-labelledby="heading${status.count}">
-						<div class="panel-body">${problem.problemContents}
-							<span style="visibility: hidden;">${problem.problemIdx}"</span>
+		<h1>홈</h1>
+		<p>국민대 전자공학부 프로그래밍 채점 사이트입니다.</p>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-9">
+				<div class="panel-group" id="accordion" role="tablist"
+					aria-multiselectable="true">
+					<c:forEach items="${problemList}" var="problem" varStatus="status">
+						<div class="panel panel-default">
+							<div class="panel-heading" role="tab" id="heading${status.count}">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion"
+										href="#collapse${status.count}" aria-expanded="true"
+										aria-controls="collapse${status.count}">
+										${problem.problemName} </a> <span style="float: right">&nbsp;<input
+										type="button" value="채점">
+									</span><span style="float: right"><input type="file"
+										name="sourceFile"></span>
+								</h4>
+							</div>
+							<div id="collapse${status.count}"
+								class="panel-collapse collapse <c:if test="${status.first}">in</c:if> "
+								role="tabpanel" aria-labelledby="heading${status.count}">
+								<div class="panel-body">${problem.problemContents}
+									<span style="visibility: hidden;">${problem.problemIdx}"</span>
+								</div>
+							</div>
 						</div>
-					</div>
+					</c:forEach>
 				</div>
-			</c:forEach>
+			</div>
 		</div>
 	</div>
 </body>
