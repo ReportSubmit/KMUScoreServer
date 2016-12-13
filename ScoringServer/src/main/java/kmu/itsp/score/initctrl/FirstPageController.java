@@ -1,9 +1,15 @@
 package kmu.itsp.score.initctrl;
 
 import java.io.File;
+import java.security.Principal;
 import java.util.Arrays;
 
+import javax.servlet.http.HttpSession;
+
+import kmu.itsp.score.user.ScoreUser;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +27,8 @@ public class FirstPageController {
 	 */
 
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
-	public String viewMainPage(Model model) {
+	public String viewMainPage(Model model, HttpSession session, Principal principal) {
+
 		return "Main";
 	}
 
@@ -64,22 +71,23 @@ public class FirstPageController {
 
 		return "admin/AnsUploadPage";
 	}
-	
+
 	@RequestMapping(value = "/export/choose", method = RequestMethod.GET)
 	public String viewAdminChooseExportPage(Model model) {
 
 		return "admin/ChooseExportPage";
 	}
+
 	@RequestMapping(value = "/prob/upload", method = RequestMethod.GET)
 	public String viewAdminProbUpload(Model model) {
 
-		return "admin/ProbUpload";
+		return "admin/ProblemUpload";
 	}
-	
+
 	@RequestMapping(value = "/test/ajaxForm", method = RequestMethod.GET)
 	public String viewTestAjaxForm(Model model) {
 
 		return "AjaxFormTest";
 	}
-	
+
 }
