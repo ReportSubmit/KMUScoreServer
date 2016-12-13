@@ -1,53 +1,46 @@
 package kmu.itsp.score.user;
 
-import java.util.List;
-
 import javax.inject.Named;
 
 import kmu.itsp.score.core.dao.CommonDAOImpl;
+import kmu.itsp.score.user.entity.UserInfoEntity;
 
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Named("UserInfoDao")
-public class UserInfoDaoImpl extends CommonDAOImpl implements UserInfoDao{
+public class UserInfoDaoImpl extends CommonDAOImpl implements UserInfoDAO {
 
 	@Override
-	public UserStatus findUserStatusByIdandPwd(String userId, String password) {
+	@Transactional
+	public UserInfoEntity findUserById(String userID) {
 		// TODO Auto-generated method stub
-		Criteria criteria =getSession().createCriteria(UserStatus.class);
-		criteria.add(Restrictions.eq("userId", userId));
-		criteria.add(Restrictions.eq("password", password));
-		
-		UserStatus userStatus=(UserStatus)criteria.uniqueResult();
-		
-		return userStatus;
+		Criteria criteria = getSession().createCriteria(UserInfoEntity.class);
+		criteria.add(Restrictions.eq("userID", userID));
+
+		UserInfoEntity entity = (UserInfoEntity) criteria.uniqueResult();
+
+		return entity;
 	}
 
 	@Override
-	public UserStatus findUserStatusById(String userId) {
+	public boolean registUser(Integer projectIdx, String userID, String userPwd) {
 		// TODO Auto-generated method stub
-		Criteria criteria =getSession().createCriteria(UserStatus.class);
-		criteria.add(Restrictions.eq("userId", userId));
+
+		UserInfoEntity entity = new UserInfoEntity();
+		entity.setProjectIdx(projectIdx);
+		entity.setUserID(userID);
+		entity.setUserPwd(userPwd);
+
+		persist(entity);
+
 		
-		UserStatus userStatus=(UserStatus)criteria.uniqueResult();
 		
-		return userStatus;
+		return true;
 	}
 
-	@Override
-	public List<UserStatus> findAllUserStatus() {
-		// TODO Auto-generated method stub
-		Criteria criteria =getSession().createCriteria(UserStatus.class);
-		List<UserStatus> userStatusList=(List<UserStatus>)criteria.list();
-		
-		return userStatusList;
-	}
-
-
-
-	
-	
 }
