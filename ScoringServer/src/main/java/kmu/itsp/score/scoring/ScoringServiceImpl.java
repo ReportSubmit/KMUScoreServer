@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
+import kmu.itsp.score.core.process.CompileResultBean;
 import kmu.itsp.score.core.process.IProcessService;
 import kmu.itsp.score.core.process.ProcessServiceFactory;
 import kmu.itsp.score.core.util.ScoreUtil;
@@ -14,8 +15,6 @@ import kmu.itsp.score.problem.ProblemDAO;
 import kmu.itsp.score.problem.entity.AnswerEntity;
 import kmu.itsp.score.problem.entity.ProblemInputEntity;
 import kmu.itsp.score.scoring.entity.ScoringTotalEntity;
-import kmu.itsp.score.scoring.temp.CompileResultBean;
-import kmu.itsp.score.scoring.temp.ScoreResultBean;
 import kmu.itsp.score.user.UserInfoDAO;
 
 import org.hibernate.HibernateException;
@@ -50,12 +49,6 @@ public class ScoringServiceImpl implements ScoringService {
 	}
 
 	private @Value("${path.temp_dir_path}") String tempDirPath;
-
-	@Override
-	public ScoreResultBean scoringUploadFile(File file, String probName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	@Transactional

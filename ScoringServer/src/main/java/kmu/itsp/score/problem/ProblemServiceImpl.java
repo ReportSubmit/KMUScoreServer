@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import kmu.itsp.score.core.process.CompileResultBean;
 import kmu.itsp.score.core.process.IProcessService;
 import kmu.itsp.score.core.process.ProcessServiceFactory;
 import kmu.itsp.score.core.util.FileManager;
 import kmu.itsp.score.problem.entity.AnswerEntity;
 import kmu.itsp.score.problem.entity.ProblemEntity;
 import kmu.itsp.score.problem.entity.ProblemInputEntity;
-import kmu.itsp.score.scoring.temp.CompileResultBean;
 
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;

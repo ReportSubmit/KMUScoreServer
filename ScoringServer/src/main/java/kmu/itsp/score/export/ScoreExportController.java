@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import kmu.itsp.score.scoring.temp.ProbScoreBean;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -31,7 +29,7 @@ public class ScoreExportController {
 		
 		exportService.findFiles(directory, fileList);
 		// System.out.println(fileList);
-		HashMap<String, List<ProbScoreBean>> scoreMap = exportService
+		HashMap<String, List<ScoreExportBean>> scoreMap = exportService
 				.scoringFiles(fileList, "final");
 
 		model.addAttribute("scoreMap", scoreMap);

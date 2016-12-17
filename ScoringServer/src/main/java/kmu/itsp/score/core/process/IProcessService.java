@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import kmu.itsp.score.scoring.temp.CompileResultBean;
-
 public interface IProcessService {
 	public static final int EXEC_SUCCESS = 101;
 	public static final int EXEC_TIMEOUT = 102;

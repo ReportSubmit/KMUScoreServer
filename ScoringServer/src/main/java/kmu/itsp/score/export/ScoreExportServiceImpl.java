@@ -9,8 +9,6 @@ import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
 import kmu.itsp.score.scoring.ScoringService;
-import kmu.itsp.score.scoring.temp.ProbScoreBean;
-import kmu.itsp.score.scoring.temp.ScoreResultBean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -47,10 +45,10 @@ public class ScoreExportServiceImpl {
 		return false;
 	}
 
-	public HashMap<String, List<ProbScoreBean>> scoringFiles(
+	public HashMap<String, List<ScoreExportBean>> scoringFiles(
 			ArrayList<File> fileList, String partName) {
 
-		HashMap<String, List<ProbScoreBean>> scoreMap = new HashMap<String, List<ProbScoreBean>>();
+		HashMap<String, List<ScoreExportBean>> scoreMap = new HashMap<String, List<ScoreExportBean>>();
 
 		for (int i = 0; i < fileList.size(); i++) {
 			Entry<String, String> entry = findStudentAndProbNum(fileList.get(i));
@@ -61,17 +59,17 @@ public class ScoreExportServiceImpl {
 				System.out.println(studentNum + ":" + probNum);
 				
 				
-				ScoreResultBean scoreResult = cScoreService.scoringUploadFile(
-						fileList.get(i), partName + "-" + probNum);
+				//ScoreResultBean scoreResult = cScoreService.scoringUploadFile(
+					//	fileList.get(i), partName + "-" + probNum);
 
-				List<ProbScoreBean> probScoreList = scoreMap.get(studentNum);
+				List<ScoreExportBean> probScoreList = scoreMap.get(studentNum);
 
 				if (probScoreList == null) {
-					probScoreList = new ArrayList<ProbScoreBean>();
+					probScoreList = new ArrayList<ScoreExportBean>();
 					scoreMap.put(studentNum, probScoreList);
 				}
-				probScoreList.add(new ProbScoreBean(probNum, scoreResult
-						.getScore()));
+//				probScoreList.add(new ScoreExportBean(probNum, scoreResult
+//						.getScore()));
 			} else {
 				System.out.println(fileList.get(i));
 			}
