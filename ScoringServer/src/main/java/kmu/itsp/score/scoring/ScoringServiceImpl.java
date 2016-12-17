@@ -13,29 +13,42 @@ import kmu.itsp.score.core.util.ScoreUtil;
 import kmu.itsp.score.problem.ProblemDAO;
 import kmu.itsp.score.problem.entity.AnswerEntity;
 import kmu.itsp.score.problem.entity.ProblemInputEntity;
+import kmu.itsp.score.scoring.entity.ScoringTotalEntity;
 import kmu.itsp.score.scoring.temp.CompileResultBean;
 import kmu.itsp.score.scoring.temp.ScoreResultBean;
+import kmu.itsp.score.user.UserInfoDAO;
 
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service(value="ScoringService")
+@Service(value = "ScoringService")
 public class ScoringServiceImpl implements ScoringService {
 
 	@Autowired
-	ProblemDAO dao;
+	ProblemDAO problemDao;
+
+	@Autowired
+	UserInfoDAO userDao;
+
+	@Autowired
+	ScoringDAO scoringDao;
+
+	@Autowired
+	ProcessServiceFactory processfactory;
 
 	private int currentProgress;
-	
+
 	public int getCurrentProgress() {
 		return currentProgress;
 	}
+
 	public void setCurrentProgress(int currentProgress) {
 		this.currentProgress = currentProgress;
 	}
-	
+
 	private @Value("${path.temp_dir_path}") String tempDirPath;
 
 	@Override
@@ -46,28 +59,27 @@ public class ScoringServiceImpl implements ScoringService {
 
 	@Override
 	@Transactional
-	public List<ScoringResultBean> scoringSourceFile(
+	public List<ScoringResultBean> scoringSourceFile(int projectIdx,
 			ScoringRequestInfoBean requestInfo) {
 		// TODO Auto-generated method stub
 
-		IProcessService processService = ProcessServiceFactory
-				.getInstance(requestInfo.getProjectIdx());
-		
+		IProcessService processService = processfactory.getInstance(projectIdx);
+
 		File file = null;
 		List<ScoringResultBean> scoringResultBeanList = new ArrayList<ScoringResultBean>();
-		
+
 		try {
 
 			file = File.createTempFile(UUID.randomUUID().toString(), null);
 			requestInfo.getSourceFile().transferTo(file);
-
+			System.out.println(file.getAbsolutePath());
 			CompileResultBean compileResult = processService.complie(file);
 
 			if (compileResult.getStatus() == IProcessService.COMPILE_SUCCESS) {
 
-				List<ProblemInputEntity> inputList = dao
+				List<ProblemInputEntity> inputList = problemDao
 						.findInputList(requestInfo.getProblemIdx());
-				List<AnswerEntity> answerEntityList = dao
+				List<AnswerEntity> answerEntityList = problemDao
 						.findAnswerList(requestInfo.getProblemIdx());
 
 				for (int i = 0; i < answerEntityList.size(); i++) {
@@ -81,29 +93,45 @@ public class ScoringServiceImpl implements ScoringService {
 							compileResult.getFileName(),
 							processService.getExcuteDirPath());
 
+					ScoringResultBean scoringResultBean = new ScoringResultBean();
+					scoringResultBean.setNo(i + 1);
+					scoringResultBean.setInput(input);
+
+					List<String> answerList = splitMsgToList(answerEntityList
+							.get(i).getAnswer());
+					scoringResultBean.setAnswerList(answerList);
+
 					if (status == IProcessService.EXEC_SUCCESS) {
-						ScoringResultBean scoringResultBean = new ScoringResultBean();
 
 						List<String> resultList = splitMsgToList(processService
 								.getSuccessResult());
-						List<String> answerList = splitMsgToList(answerEntityList
-								.get(i).getAnswer());
 
-						scoringResultBean.setNo(i + 1);
-						scoringResultBean.setAnswerList(answerList);
 						scoringResultBean.setResultList(resultList);
-						scoringResultBean.setInput(input);
+						int eachScore = compareResultToAnswer(resultList,
+								answerList);
 
-						if (compareResultToAnswer(resultList, answerList)) {
+						if (eachScore == 100) {
 							scoringResultBean.setRight(true);
+							scoringResultBean.setMsg("Correct:excute");
 						} else {
 							scoringResultBean.setRight(false);
+							scoringResultBean.setMsg("Incorrect:excute");
 						}
-						setCurrentProgress((i+1)*100/answerEntityList.size());
+
+						scoringResultBean.setScore(eachScore);
 						scoringResultBeanList.add(scoringResultBean);
-					}else{
+
+						// progress
+						setCurrentProgress((i + 1) * 100
+								/ answerEntityList.size());
+					} else {
+						scoringResultBean.setRight(false);
+						scoringResultBean.setScore(0);
+						scoringResultBean.setResultList(null);
+						scoringResultBeanList.add(scoringResultBean);
+						scoringResultBean.setMsg("Error:do not excute");
+						// progress
 						setCurrentProgress(0);
-						return null;
 					}
 				}
 
@@ -145,44 +173,81 @@ public class ScoringServiceImpl implements ScoringService {
 
 	}
 
-	public boolean compareResultToAnswer(List<String> resultList,
+	public int compareResultToAnswer(List<String> resultList,
 			List<String> answerList) {
 		// answer and result compare
 
-		if (resultList.size() != answerList.size()) {
-			return false;
-		}
-
 		int matchCount = 0;
-
+		int score;
 		for (int i = 0; i < resultList.size(); i++) {
-			if (!resultList.get(i).equals(answerList.get(i))) {
-				return false;
+			if (resultList.get(i).equals(answerList.get(i))) {
+				matchCount++;
 			}
 		}
-
-		return true;
+		score = matchCount * 100 / answerList.size();
+		if (score > 100) {
+			score = 0;
+		}
+		return score;
 	}
-	
+
 	@Override
-	@Transactional
-	public boolean registResult(ScoringRequestInfoBean requestInfo, List<ScoringResultBean> scoringResults) {
+	@Transactional(rollbackFor = HibernateException.class)
+	public boolean registResult(int userIdx,
+			ScoringRequestInfoBean requestInfo,
+			List<ScoringResultBean> scoringResults) {
 		// TODO Auto-generated method stub
-		int count=0;
-		for(int i=0;i<scoringResults.size();i++){
-			if(!scoringResults.get(i).isRight()){
+		int count = 0;
+		for (int i = 0; i < scoringResults.size(); i++) {
+			if (scoringResults.get(i).isRight()) {
 				count++;
 			}
 		}
-		int score = -1;
-		if(scoringResults.size()>0){
-			score = count*100/scoringResults.size();
-			System.out.println(score);
+		int totalScore = -1;
+		if (scoringResults.size() > 0) {
+			totalScore = count * 100 / scoringResults.size();
+			System.out.println(totalScore);
 		}
-		
-		//dao.addResult(userid,problemIdx,score);
-		
+		scoringDao.addTotalScore(userIdx, requestInfo.getProblemIdx(),
+				totalScore);
+		scoringDao.addScoringResults(userIdx, requestInfo.getProblemIdx(),
+				scoringResults);
+
 		return true;
+	}
+
+	@Override
+	@Transactional
+	public ScoringReadResponseBean readResult(int userIdx, int problemIdx) {
+		// TODO Auto-generated method stub
+		ScoringReadResponseBean scoreReadBean = new ScoringReadResponseBean();
+		scoreReadBean.setProblemIdx(problemIdx);
+		scoreReadBean.setInfos(scoringDao.findScoringResult(userIdx, problemIdx));
+
+		return scoreReadBean;
+	}
+
+	@Override
+	@Transactional
+	public List<ScoringReadResponseBean> readResults(int userIdx) {
+		// TODO Auto-generated method stub
+		int endProblemIdx = problemDao.getLastProblemIdx();
+		List<ScoringReadResponseBean> scoreReadBeanList = new ArrayList<ScoringReadResponseBean>();
+		System.out.println(endProblemIdx);
+
+		for (int i = 0; i <= endProblemIdx; i++) {
+
+			List<ScoringTotalEntity> entitys = scoringDao.findScoringTotalResult(
+					userIdx, i);
+			if(entitys != null && !entitys.isEmpty()){
+				ScoringReadResponseBean scoreReadBean = new ScoringReadResponseBean();
+				scoreReadBean.setProblemIdx(i);
+				scoreReadBean.setInfos(entitys);
+				scoreReadBeanList.add(scoreReadBean);
+			}
+		}
+
+		return scoreReadBeanList;
 	}
 
 }

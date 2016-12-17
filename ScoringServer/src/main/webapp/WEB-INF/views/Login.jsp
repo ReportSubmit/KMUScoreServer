@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
+<%@include file="./include/tags.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -56,6 +55,9 @@
 				</form>
 			</div>
 		</div>
+		<c:if test="${param.msg ne null}">
+			${param.msg}
+		</c:if>
 	</div>
 
 	<div class="modal fade bs-example-modal-sm" id="signup" tabindex="-1"

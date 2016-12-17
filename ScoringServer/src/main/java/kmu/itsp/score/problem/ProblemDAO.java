@@ -2,11 +2,12 @@ package kmu.itsp.score.problem;
 
 import java.util.List;
 
+import kmu.itsp.score.core.dao.CommonDAO;
 import kmu.itsp.score.problem.entity.AnswerEntity;
 import kmu.itsp.score.problem.entity.ProblemEntity;
 import kmu.itsp.score.problem.entity.ProblemInputEntity;
 
-public interface ProblemDAO {
+public interface ProblemDAO extends CommonDAO{
 	
 	boolean addProblemEntity(int projectIdx, String problemName, String problemContents);
 	boolean addInputs(int problemIdx, String[] inputValues);

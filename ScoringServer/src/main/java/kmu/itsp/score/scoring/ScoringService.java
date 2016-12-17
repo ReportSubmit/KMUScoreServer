@@ -9,8 +9,13 @@ public interface ScoringService {
 
 	ScoreResultBean scoringUploadFile(File file, String probName);
 	
-	List<ScoringResultBean> scoringSourceFile(ScoringRequestInfoBean requestInfo);
+	boolean registResult(int userIdx, ScoringRequestInfoBean requestInfo, List<ScoringResultBean> scoringResults);
 
-	boolean registResult(ScoringRequestInfoBean requestInfo, List<ScoringResultBean> scoringResults);
+	List<ScoringResultBean> scoringSourceFile(int projectIdx,
+			ScoringRequestInfoBean requestInfo);
+
+	ScoringReadResponseBean readResult(int userIdx, int problemIdx);
+
+	List<ScoringReadResponseBean> readResults(int userIdx);
 	
 }

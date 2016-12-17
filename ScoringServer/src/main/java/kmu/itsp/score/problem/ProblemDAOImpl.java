@@ -3,6 +3,7 @@ package kmu.itsp.score.problem;
 import java.util.List;
 
 import kmu.itsp.score.core.dao.CommonDAO;
+import kmu.itsp.score.core.dao.CommonDAOImpl;
 import kmu.itsp.score.problem.entity.AnswerEntity;
 import kmu.itsp.score.problem.entity.ProblemEntity;
 import kmu.itsp.score.problem.entity.ProblemInputEntity;
@@ -17,75 +18,58 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Repository
-public class ProblemDAOImpl implements ProblemDAO {
-	@Autowired
-	CommonDAO dao;
+public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 
 	@Override
 	public boolean addProblemEntity(int projectIdx, String problemName,
 			String problemContents) {
-		try {
-			ProblemEntity entity = new ProblemEntity();
-			entity.setProjectIdx(projectIdx);
-			entity.setProblemName(problemName);
-			entity.setProblemContents(problemContents);
-			dao.persist(entity);
-			// insert problem entity
 
-			return true;
-		} catch (HibernateException e) {
-			e.printStackTrace();
-			dao.getSession().getTransaction().rollback();
-		}
+		ProblemEntity entity = new ProblemEntity();
+		entity.setProjectIdx(projectIdx);
+		entity.setProblemName(problemName);
+		entity.setProblemContents(problemContents);
+		persist(entity);
+		// insert problem entity
 
-		return false;
+		return true;
+
 	}
 
 	@Override
 	public int getLastProblemIdx() {
-		SQLQuery query = dao
-				.getSession()
+		SQLQuery query = getSession()
 				.createSQLQuery(
 						"SELECT problem_idx FROM tb_problem ORDER BY problem_idx DESC LIMIT 1;");
-		return (int) query.uniqueResult();
-
+		try {
+			return (int) query.uniqueResult();
+		} catch (HibernateException he) {
+			// TODO: handle exception
+			return 0;
+		}
 	}
 
 	@Override
 	public boolean addInputs(int problemIdx, String[] inputValues) {
-		try {
-			for (int i = 0; i < inputValues.length; i++) {
-				ProblemInputEntity entity = new ProblemInputEntity();
-				entity.setProblemIdx(problemIdx);
-				entity.setInputNo(i + 1);
-				entity.setInput(inputValues[i]);
-				dao.persist(entity);
-			}
-			return true;
-		} catch (HibernateException e) {
-			e.printStackTrace();
-			dao.getSession().getTransaction().rollback();
+		for (int i = 0; i < inputValues.length; i++) {
+			ProblemInputEntity entity = new ProblemInputEntity();
+			entity.setProblemIdx(problemIdx);
+			entity.setInputNo(i + 1);
+			entity.setInput(inputValues[i]);
+			persist(entity);
 		}
-		return false;
-
+		return true;
 	}
 
 	@Override
 	public boolean addAnswer(int problemIdx, AnswerEntity entity) {
 		// TODO Auto-generated method stub
-		try {
 
-			entity.setProblemIdx(problemIdx);
+		entity.setProblemIdx(problemIdx);
 
-			dao.persist(entity);
-			// insert problem entity
+		persist(entity);
+		// insert problem entity
 
-			return true;
-		} catch (HibernateException e) {
-			e.printStackTrace();
-			dao.getSession().getTransaction().rollback();
-		}
-		return false;
+		return true;
 	}
 
 	@Override
@@ -96,11 +80,12 @@ public class ProblemDAOImpl implements ProblemDAO {
 		System.out.println(projectIdx + ":" + pageIdx + ":" + entitySize + ":"
 				+ pageIdx * (entitySize - 1) + ":" + pageIdx * (entitySize));
 
-		Criteria criteria = dao.getSession()
-				.createCriteria(ProblemEntity.class);
+		Criteria criteria = getSession().createCriteria(ProblemEntity.class);
 
 		// compare id
-		criteria.add(Restrictions.eq("projectIdx", projectIdx));
+		if(projectIdx != 10){
+			criteria.add(Restrictions.eq("projectIdx", projectIdx));
+		}
 		criteria.addOrder(Order.desc("problemIdx"));
 
 		// limit
@@ -131,7 +116,7 @@ public class ProblemDAOImpl implements ProblemDAO {
 	@Override
 	public List<AnswerEntity> findAnswerList(int problemIdx) {
 		// TODO Auto-generated method stub
-		Criteria criteria = dao.getSession().createCriteria(AnswerEntity.class);
+		Criteria criteria = getSession().createCriteria(AnswerEntity.class);
 
 		criteria.add(Restrictions.eq("problemIdx", problemIdx));
 
@@ -140,18 +125,20 @@ public class ProblemDAOImpl implements ProblemDAO {
 		for (int i = 0; i < answerList.size(); i++) {
 			System.out.println(answerList.get(i).getAnswer());
 		}
-		
+
 		return answerList;
 	}
 
 	@Override
 	public List<ProblemInputEntity> findInputList(int problemIdx) {
 		// TODO Auto-generated method stub
-		Criteria criteria = dao.getSession().createCriteria(ProblemInputEntity.class);
+		Criteria criteria = getSession().createCriteria(
+				ProblemInputEntity.class);
 
 		criteria.add(Restrictions.eq("problemIdx", problemIdx));
 
-		List<ProblemInputEntity> inputList = (List<ProblemInputEntity>) criteria.list();
+		List<ProblemInputEntity> inputList = (List<ProblemInputEntity>) criteria
+				.list();
 
 		for (int i = 0; i < inputList.size(); i++) {
 			System.out.println(inputList.get(i).getInput());

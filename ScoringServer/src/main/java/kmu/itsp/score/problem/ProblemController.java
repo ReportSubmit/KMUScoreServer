@@ -26,24 +26,27 @@ public class ProblemController {
 
 		if (service.registProblem(problemInfo)) {
 			// go to read problem page
-			return "redirect:";
+			return "redirect:/read/problems?projectIdx="
+					+ problemInfo.getProblemIdx();
 		}
 
-		return "admin/ProbUpload";
+		return "admin/ProblemUpload";
 	}
 
 	@RequestMapping(value = "/read/problems", method = RequestMethod.GET)
-	public String readProblems(@RequestParam(value = "projectIdx", required = true) int projectIdx,
-	@RequestParam(value = "pageIdx", defaultValue = "0") int pageIdx,
-	@RequestParam(value = "listSize", defaultValue = "10") int listSize, Model model) {
+	public String readProblems(
+			@RequestParam(value = "projectIdx", required = true) int projectIdx,
+			@RequestParam(value = "pageIdx", defaultValue = "0") int pageIdx,
+			@RequestParam(value = "listSize", defaultValue = "10") int listSize,
+			Model model) {
 
 		List<ProblemEntity> problemList = service.getProblemList(projectIdx,
 				pageIdx, listSize);
 		model.addAttribute("problemList", problemList);
-		for(ProblemEntity problem : problemList){
+		for (ProblemEntity problem : problemList) {
 			System.out.println(problem.getProblemName());
 		}
-			
-		return "admin/ProblemBoard";
+
+		return "forward:/scoring/read/all";
 	}
 }

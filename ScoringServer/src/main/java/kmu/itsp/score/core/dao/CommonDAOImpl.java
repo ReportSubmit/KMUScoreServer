@@ -32,7 +32,7 @@ public abstract class CommonDAOImpl implements CommonDAO{
 	}
 	@Override
 	public void update(Object entity) {
-		getSession().update(entity);
+		getSession().saveOrUpdate(entity);
 	}
 	@Override
 	public void delete(Object entity) {
