@@ -10,6 +10,8 @@ public class ScoringResultBean{
 	private int no;
 	private boolean isRight;
 	private String input;
+	private int score;
+	private String msg;
 	private List<String> answerList;
 	private List<String> resultList;
 	public int getNo() {
@@ -41,7 +43,20 @@ public class ScoringResultBean{
 	}
 	public void setResultList(List<String> resultList) {
 		this.resultList = resultList;
-	} 
+	}
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
+	
 		
 
 	

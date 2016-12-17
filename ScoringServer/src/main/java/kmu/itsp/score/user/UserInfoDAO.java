@@ -9,6 +9,8 @@ public interface UserInfoDAO extends CommonDAO{
 
 	boolean registUser(Integer projectIdx, String userID, String userPwd);
 
+	int getLastUserIdx();
+
 
 	//insert
 }

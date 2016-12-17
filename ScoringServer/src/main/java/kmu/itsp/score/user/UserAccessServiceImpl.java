@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 
 import kmu.itsp.score.user.entity.UserInfoEntity;
 
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -59,7 +57,7 @@ public class UserAccessServiceImpl implements UserDetailsService,
 		}
 
 		ScoreUser userDetails = new ScoreUser(userEntity.getUserID(),
-				userEntity.getUserPwd(), authorities,userEntity.getProjectIdx());
+				userEntity.getUserPwd(), authorities,userEntity.getProjectIdx(), userEntity.getUserIdx());
 
 		
 		 

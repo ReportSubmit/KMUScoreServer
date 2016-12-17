@@ -1,6 +1,7 @@
 package kmu.itsp.score.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class UserAccessController {
 
 	@Autowired
+	@Qualifier(value="UserAccessService")
 	UserAccessService service;
 	
 	@RequestMapping(value = "/login", method={RequestMethod.POST,RequestMethod.GET})
@@ -30,12 +32,16 @@ public class UserAccessController {
 		System.out.println(projectIdx);
 		System.out.println(userID);
 		System.out.println(userPwd);
-		
-		if(service.registUser(projectIdx,userID,userPwd)){
-			return "redirect:/login";
+		String msg;
+		try {
+			service.registUser(projectIdx,userID,userPwd);
+			msg = "가입되었습니다.";
+		} catch (Exception e) {
+			// TODO: handle exception
+			msg = "가입+실패하였습니다.";
 		}
-		
-		return "redirect:/login?msg=가입실패";
+		System.out.println(msg);
+		return "redirect:/login?msg="+msg;
 	}
 	
 }

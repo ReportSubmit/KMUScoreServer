@@ -135,16 +135,17 @@ public class CScoringServiceImpl implements ScoringService{
 	}
 
 	@Override
-	public List<ScoringResultBean> scoringSourceFile(ScoringRequestInfoBean requestInfo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean registResult(ScoringRequestInfoBean requestInfo,
+	public boolean registResult(int userIdx,ScoringRequestInfoBean requestInfo,
 			List<ScoringResultBean> scoringResults) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public List<ScoringResultBean> scoringSourceFile(int projectIdx,
+			ScoringRequestInfoBean requestInfo) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

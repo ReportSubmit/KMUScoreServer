@@ -18,6 +18,10 @@ public class UserInfoEntity implements Serializable {
 	private Integer projectIdx;
 	
 	@Id
+	@Column(name = "user_idx", nullable = false)
+	private Integer userIdx;
+	
+	@Id
 	@Column(name = "user_id", nullable = false, unique = true)
 	private String userID;
 
@@ -62,6 +66,13 @@ public class UserInfoEntity implements Serializable {
 	
 	public void setUserGrade(Integer userGrade) {
 		this.userGrade = userGrade;
+	}
+
+	public Integer getUserIdx() {
+		return userIdx;
+	}
+	public void setUserIdx(Integer userIdx) {
+		this.userIdx = userIdx;
 	}
 	
 	@Override

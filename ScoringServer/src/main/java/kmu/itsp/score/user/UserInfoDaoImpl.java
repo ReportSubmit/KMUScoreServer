@@ -7,6 +7,7 @@ import kmu.itsp.score.user.entity.UserInfoEntity;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,9 +39,20 @@ public class UserInfoDaoImpl extends CommonDAOImpl implements UserInfoDAO {
 
 		persist(entity);
 
-		
-		
 		return true;
 	}
 
+	@Override
+	public int getLastUserIdx() {
+		SQLQuery query = getSession()
+				.createSQLQuery(
+						"SELECT user_idx FROM tb_user ORDER BY user_idx DESC LIMIT 1;");
+		try {
+			return (int) query.uniqueResult();
+		} catch (HibernateException he) {
+			// TODO: handle exception
+			return 0;
+		}
+	}
+	
 }
