@@ -46,7 +46,7 @@ public class FirstPageController {
 			System.out.println("error");
 		}
 
-		return "student/CodeTestPage";
+		return "test/CodeTestPage";
 	}
 
 	// 나중에 주소를 /user/score/upload로 변경할것!
@@ -62,26 +62,26 @@ public class FirstPageController {
 			System.out.println("error");
 		}
 
-		return "student/ScoreUploadPage";
+		return "test/ScoreUploadPage";
 	}
 
 	// 나중에 주소를 /user/score/admin/upload로 변경할것!
 	@RequestMapping(value = "/ans/upload", method = RequestMethod.GET)
 	public String viewAdminUploadPage(Model model) {
 
-		return "admin/AnsUploadPage";
+		return "test/AnsUploadPage";
 	}
 
 	@RequestMapping(value = "/export/choose", method = RequestMethod.GET)
 	public String viewAdminChooseExportPage(Model model) {
 
-		return "admin/ChooseExportPage";
+		return "export/ChooseExportPage";
 	}
 
 	@RequestMapping(value = "/prob/upload", method = RequestMethod.GET)
 	public String viewAdminProbUpload(Model model) {
 
-		return "admin/ProblemUpload";
+		return "problem/ProblemUpload";
 	}
 
 	@RequestMapping(value = "/test/ajaxForm", method = RequestMethod.GET)

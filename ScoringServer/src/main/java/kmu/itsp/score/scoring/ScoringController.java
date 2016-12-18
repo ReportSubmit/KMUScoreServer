@@ -89,6 +89,6 @@ public class ScoringController {
 
 		model.addAttribute("scoreResults", scoreReadBeanList);
 
-		return "admin/ProblemBoard";
+		return "problem/ProblemBoard";
 	}
 }

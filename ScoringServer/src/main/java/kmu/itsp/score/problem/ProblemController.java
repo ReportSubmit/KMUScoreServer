@@ -30,7 +30,7 @@ public class ProblemController {
 					+ problemInfo.getProblemIdx();
 		}
 
-		return "admin/ProblemUpload";
+		return "problem/ProblemUpload";
 	}
 
 	@RequestMapping(value = "/read/problems", method = RequestMethod.GET)
