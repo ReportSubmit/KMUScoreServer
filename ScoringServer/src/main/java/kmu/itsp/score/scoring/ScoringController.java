@@ -35,8 +35,8 @@ public class ScoringController {
 		}
 		try {
 
-			List<ScoringResultBean> scoringResults = service.scoringSourceFile(
-					userDetail.getProjectIdx(), requestInfo);
+			List<ScoringResultBean> scoringResults = service
+					.scoringSourceFile(requestInfo);
 			// for(ScoringResultBean result : scoringResults){
 			// System.out.println(result.getNo()+":"+result.getMsg()+":"+
 			// result.getScore());
@@ -44,7 +44,7 @@ public class ScoringController {
 
 			service.registResult(userDetail.getUserIdx(), requestInfo,
 					scoringResults);
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			ResponseEntity<String> responseEntity = new ResponseEntity<String>(
@@ -54,13 +54,14 @@ public class ScoringController {
 
 		ResponseEntity<String> responseEntity = new ResponseEntity<String>(
 				"OK", HttpStatus.OK);
-		
+
 		return responseEntity;
 
 	}
 
 	@RequestMapping(value = "/ajax/scoring/read", method = RequestMethod.GET)
-	public @ResponseBody ScoringReadResponseBean readScoringResult(int problemIdx) {
+	public @ResponseBody ScoringReadResponseBean readScoringResult(
+			int problemIdx) {
 		Object principal = SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 

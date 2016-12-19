@@ -13,9 +13,9 @@
 						<li><a href="/score/getting-started">시작하기</a></li>
 
 						<li><a
-							href="/score/read/problems?projectIdx=<sec:authentication property="principal.projectIdx"/>">문제풀이</a></li>
+							href="/score/read/problems">문제풀이</a></li>
 						<sec:authorize access="hasRole('ROLE_ADMIN')">
-							<li><a href="/score/prob/upload">문제업로드</a></li>
+							<li><a href="/score/admin/prob/upload">문제업로드</a></li>
 						</sec:authorize>
 					</ul>
 

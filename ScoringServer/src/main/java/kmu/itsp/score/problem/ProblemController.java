@@ -3,8 +3,10 @@ package kmu.itsp.score.problem;
 import java.util.List;
 
 import kmu.itsp.score.problem.entity.ProblemEntity;
+import kmu.itsp.score.user.ScoreUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,12 +37,19 @@ public class ProblemController {
 
 	@RequestMapping(value = "/read/problems", method = RequestMethod.GET)
 	public String readProblems(
-			@RequestParam(value = "projectIdx", required = true) int projectIdx,
 			@RequestParam(value = "pageIdx", defaultValue = "0") int pageIdx,
 			@RequestParam(value = "listSize", defaultValue = "10") int listSize,
 			Model model) {
 
-		List<ProblemEntity> problemList = service.getProblemList(projectIdx,
+		Object principal = SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+
+		ScoreUser userDetail = null;
+		if (principal instanceof ScoreUser) {
+			userDetail = (ScoreUser) principal;
+		}
+		
+		List<ProblemEntity> problemList = service.getProblemList(userDetail.getProjectIdx(),
 				pageIdx, listSize);
 		model.addAttribute("problemList", problemList);
 		for (ProblemEntity problem : problemList) {

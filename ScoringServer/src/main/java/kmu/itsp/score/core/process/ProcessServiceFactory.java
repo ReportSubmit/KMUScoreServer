@@ -20,10 +20,10 @@ public class ProcessServiceFactory {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public IProcessService getInstance(Integer projectIdx){
+	public IProcessService getInstance(Integer compilerIdx){
 		
-		switch (projectIdx) {
-		case 1:case 2:
+		switch (compilerIdx) {
+		case 1:
 			return gccProcessServiceInstance;
 
 		default:

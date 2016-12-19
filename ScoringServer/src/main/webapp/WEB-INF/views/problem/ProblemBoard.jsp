@@ -35,7 +35,7 @@
 <script type="text/javascript">
 
 	$(document).ready(function() {
-
+		
 	    $("button[name=confirm]").popover({
 	        html : true, 
 	        content: function() {
@@ -51,6 +51,10 @@
 		$('tr button[name="scoring"]').on('click', function() {
 			var formData = new FormData();
 			var trTag = $(this).closest('tr');
+			
+			var complieOption = $('#complieOption').val();
+			formData.append("complierIdx",complieOption);
+			
 			var problemIdx;
 			trTag.find('input').each(function(index){
 				var inputName = $(this).attr('name');
@@ -102,7 +106,7 @@
 							+"<tr><th>번호</th><th>입력</th><th>점수</th></tr>";
 							$.each(obj.infos, function(index, info){
 								if(index ==0){
-									scoreBody.text("<h4>"+info.score+"</h4>");
+									scoreBody.html("<h4>"+info.score+"</h4>");
 									
 								}else{
 									inputHtml=inputHtml+"<tr>"
@@ -213,6 +217,13 @@ table td,th{
 	<div class="container">
 		<div class="row">
 			<div class="col-md-9">
+			<select id="complieOption" style="position:relative; float:right; width: 50px;">
+			<option value="1" selected="selected">C</option>
+			</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-9">
 				<table class="table table-bordered table-striped bs-events-table">
 					<thead>
 						<tr>
@@ -226,7 +237,7 @@ table td,th{
 					<tbody>
 						<c:forEach items="${problemList}" var="problem" varStatus="pstatus">
 							<tr id="tr_input${pstatus.count}">
-								<td><input type="hidden" name="problemIdx"
+								<td><sec:authorize access="hasRole('ROLE_ADMIN')">${problem.projectIdx}</sec:authorize><input type="hidden" name="problemIdx"
 									value="${problem.problemIdx}"><h4><a data-toggle="collapse"
 									href="#collapse${pstatus.count}">${problem.problemName}</a></h4></td>
 								<td>

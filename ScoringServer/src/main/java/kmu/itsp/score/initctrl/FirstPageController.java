@@ -20,14 +20,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 public class FirstPageController {
-	// User infomation DAO
-
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
 
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
-	public String viewMainPage(Model model, HttpSession session, Principal principal) {
+	public String viewMainPage(Model model,Principal principal) {
 
 		return "Main";
 	}
@@ -78,7 +73,7 @@ public class FirstPageController {
 		return "export/ChooseExportPage";
 	}
 
-	@RequestMapping(value = "/prob/upload", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/prob/upload", method = RequestMethod.GET)
 	public String viewAdminProbUpload(Model model) {
 
 		return "problem/ProblemUpload";

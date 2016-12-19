@@ -83,7 +83,7 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 		Criteria criteria = getSession().createCriteria(ProblemEntity.class);
 
 		// compare id
-		if(projectIdx != 10){
+		if(projectIdx != 100){
 			criteria.add(Restrictions.eq("projectIdx", projectIdx));
 		}
 		criteria.addOrder(Order.desc("problemIdx"));

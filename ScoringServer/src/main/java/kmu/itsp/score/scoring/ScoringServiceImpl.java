@@ -52,11 +52,11 @@ public class ScoringServiceImpl implements ScoringService {
 
 	@Override
 	@Transactional
-	public List<ScoringResultBean> scoringSourceFile(int projectIdx,
+	public List<ScoringResultBean> scoringSourceFile(
 			ScoringRequestInfoBean requestInfo) {
 		// TODO Auto-generated method stub
 
-		IProcessService processService = processfactory.getInstance(projectIdx);
+		IProcessService processService = processfactory.getInstance(requestInfo.getComplierIdx());
 
 		File file = null;
 		List<ScoringResultBean> scoringResultBeanList = new ArrayList<ScoringResultBean>();
