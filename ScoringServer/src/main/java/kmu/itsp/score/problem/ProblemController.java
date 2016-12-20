@@ -6,12 +6,14 @@ import kmu.itsp.score.problem.entity.ProblemEntity;
 import kmu.itsp.score.user.ScoreUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ProblemController {
@@ -55,6 +57,17 @@ public class ProblemController {
 			System.out.println(problem.getProblemName());
 		}
 
-		return "forward:/scoring/read/all";
+		return "forward:/read/scoring/all";
+	}
+	
+	@Secured(value={"ROLE_ADMIN"})
+	@RequestMapping(value = "/ajax/remove/problem", method = RequestMethod.DELETE)
+	public @ResponseBody String removeProblem(Integer problemIdx) {
+
+		if(!service.removeProblem(problemIdx)){
+			return "error";
+		}
+
+		return "success";
 	}
 }

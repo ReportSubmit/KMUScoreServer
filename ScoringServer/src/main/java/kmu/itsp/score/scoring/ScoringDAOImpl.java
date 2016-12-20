@@ -19,6 +19,8 @@ public class ScoringDAOImpl extends CommonDAOImpl implements ScoringDAO {
 			List<ScoringResultBean> scoringResults) {
 		// TODO Auto-generated method stub
 
+		System.out.println(problemIdx);
+		
 		for (int i = 0; i < scoringResults.size(); i++) {
 			ScoringResultEntity entity = new ScoringResultEntity();
 			entity.setProblemIdx(problemIdx);

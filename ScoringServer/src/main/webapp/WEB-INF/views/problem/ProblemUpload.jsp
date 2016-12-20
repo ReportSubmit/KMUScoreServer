@@ -61,8 +61,8 @@
 										.split('\\').pop(); // 파일명만 추출
 			}
 	
-		// 추출한 파일명 삽입
-		$(this).siblings('.upload-name').val(filename);
+			// 추출한 파일명 삽입
+			$(this).siblings('.upload-name').val(filename);
 	
 		});		
 	});
@@ -199,6 +199,7 @@
 		<form:form
 			action="/score/add/problem?${_csrf.parameterName}=${_csrf.token}"
 			method="post" enctype="multipart/form-data">
+			
 			<div class="row">
 
 				<div class="col-md-8">

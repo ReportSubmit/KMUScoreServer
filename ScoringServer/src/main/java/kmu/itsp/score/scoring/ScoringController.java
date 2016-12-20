@@ -22,7 +22,7 @@ public class ScoringController {
 	@Qualifier("ScoringService")
 	ScoringService service;
 
-	@RequestMapping(value = "/ajax/scoring/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/ajax/add/scoring", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<String> addScoringResult(
 			ScoringRequestInfoBean requestInfo) {
 
@@ -60,7 +60,7 @@ public class ScoringController {
 
 	}
 
-	@RequestMapping(value = "/ajax/scoring/read", method = RequestMethod.GET)
+	@RequestMapping(value = "/ajax/read/scoring", method = RequestMethod.GET)
 	public @ResponseBody ScoringReadResponseBean readScoringResult(
 			int problemIdx) {
 		Object principal = SecurityContextHolder.getContext()
@@ -74,7 +74,7 @@ public class ScoringController {
 		return service.readResult(userDetail.getUserIdx(), problemIdx);
 	}
 
-	@RequestMapping(value = "/scoring/read/all", method = RequestMethod.GET)
+	@RequestMapping(value = "/read/scoring/all", method = RequestMethod.GET)
 	public String readScoringResults(Model model) {
 
 		Object principal = SecurityContextHolder.getContext()
