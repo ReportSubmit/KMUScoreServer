@@ -1,4 +1,4 @@
-package kmu.itsp.score.problem.entity;
+package kmu.itsp.score.project.entity;
 
 import java.io.Serializable;
 

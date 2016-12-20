@@ -19,6 +19,7 @@ public class UserAccessController {
 	}
 	@RequestMapping(value = "/logout")
 	public String logout(){
+		
 		return "redirect:/login?logout";
 	}
 	@RequestMapping(value = "/loginfail")

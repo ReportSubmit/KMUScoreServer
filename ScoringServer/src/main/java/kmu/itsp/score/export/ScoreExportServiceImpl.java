@@ -10,14 +10,11 @@ import java.util.StringTokenizer;
 
 import kmu.itsp.score.scoring.ScoringService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service(value = "ScoreExportService")
 public class ScoreExportServiceImpl {
-	@Autowired
-	@Qualifier(value = "CScoreService")
+	
 	ScoringService cScoreService;
 
 	void findFiles(File targetDir, List<File> fileList) {

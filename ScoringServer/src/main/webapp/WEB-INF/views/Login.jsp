@@ -42,7 +42,7 @@
 					method="post">
 					<sec:csrfInput />
 					<div class="form-group">
-						<label for="id">이메일</label><input type="text" name="username"
+						<label for="id">아이디</label><input type="text" name="username"
 							class="form-control" placeholder="아이디">
 					</div>
 					<div class="form-group">

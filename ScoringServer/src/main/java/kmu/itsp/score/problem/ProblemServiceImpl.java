@@ -29,8 +29,8 @@ public class ProblemServiceImpl implements ProblemService {
 	private @Value("${path.temp_dir_path}") String tempDirPath;
 
 	@Override
-	@Transactional(rollbackFor=HibernateException.class)
-	public boolean registProblem(ProblemInfoBean problemInfo){
+	@Transactional(rollbackFor = HibernateException.class)
+	public boolean registProblem(ProblemInfoBean problemInfo, int compilerIdx) {
 		// TODO Auto-generated method stub
 
 		int nextProblemIdx = dao.getLastProblemIdx() + 1;
@@ -61,12 +61,16 @@ public class ProblemServiceImpl implements ProblemService {
 
 		try {
 			IProcessService processService = processFactory
-					.getInstance(problemInfo.getProjectIdx());
+					.getInstance(compilerIdx);
 
 			CompileResultBean compileResult = processService.complie(file);
 
 			if (compileResult.getStatus() == IProcessService.COMPILE_SUCCESS) {
 				String inputs[] = problemInfo.getInputValue();
+				if(inputs == null){
+					inputs = new String[1];
+					inputs[0] = "";
+				}
 				for (int i = 0; i < inputs.length; i++) {
 					int status = processService.runExcuteFile(inputs[i],
 							compileResult.getFileName(),
@@ -102,6 +106,7 @@ public class ProblemServiceImpl implements ProblemService {
 						return false;
 					}
 				}
+
 			} else {
 				return false;
 			}
@@ -126,7 +131,7 @@ public class ProblemServiceImpl implements ProblemService {
 	}
 
 	@Override
-	@Transactional(rollbackFor=HibernateException.class)
+	@Transactional(rollbackFor = HibernateException.class)
 	public List<ProblemInputEntity> getInputList(int problemIdx) {
 		// TODO Auto-generated method stub
 		List<ProblemInputEntity> inputList = dao.findInputList(problemIdx);
@@ -134,7 +139,7 @@ public class ProblemServiceImpl implements ProblemService {
 	}
 
 	@Override
-	@Transactional(rollbackFor=HibernateException.class)
+	@Transactional(rollbackFor = HibernateException.class)
 	public List<AnswerEntity> getAnswerList(int problemIdx) {
 		// TODO Auto-generated method stub
 		List<AnswerEntity> answerList = dao.findAnswerList(problemIdx);

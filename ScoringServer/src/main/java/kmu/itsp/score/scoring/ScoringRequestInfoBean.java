@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ScoringRequestInfoBean {
 
 	private Integer problemIdx;
+	private Integer compilerIdx;
 	private MultipartFile sourceFile;
 
 	public Integer getProblemIdx() {
@@ -21,5 +22,13 @@ public class ScoringRequestInfoBean {
 
 	public void setSourceFile(MultipartFile sourceFile) {
 		this.sourceFile = sourceFile;
+	}
+
+	public Integer getCompilerIdx() {
+		return compilerIdx;
+	}
+
+	public void setCompilerIdx(Integer complierIdx) {
+		this.compilerIdx = complierIdx;
 	}
 }
