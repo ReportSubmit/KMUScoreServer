@@ -14,12 +14,12 @@
 		<intercept-url pattern="/signup" access="permitAll" />
 		<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/**"
-			access="hasRole('ROLE_USER')OR hasRole('ROLE_ADMIN')" />
+			access="hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')" />
 		<form-login login-processing-url="/j_spring_security_check"
 			login-page="/login" default-target-url="/main"
 			authentication-failure-url="/loginfail" />
-		<logout logout-success-url="/main" logout-url="/logout"
-			invalidate-session="true" delete-cookies="JSESSIONID" />
+		<logout logout-success-url="/login" logout-url="/logout"
+			invalidate-session="true" delete-cookies="jsessionid" />
 	</http>
 	<!--  <password-encoder hash="sha"/>-->
 	<authentication-manager>

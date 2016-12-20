@@ -53,7 +53,7 @@
 			var trTag = $(this).closest('tr');
 			
 			var complieOption = $('#complieOption').val();
-			formData.append("complierIdx",complieOption);
+			formData.append("compilerIdx",complieOption);
 			
 			var problemIdx;
 			trTag.find('input').each(function(index){
@@ -65,7 +65,9 @@
 					if(inputName == "problemIdx"){
 						problemIdx= $(this).val();
 					}
+				}else if(inputName == "no_input"){
 				}else{
+
 					inputValue = $(this)[0].files[0];
 				}
 				formData.append(inputName,inputValue);
@@ -241,6 +243,7 @@ table td,th{
 									value="${problem.problemIdx}"><h4><a data-toggle="collapse"
 									href="#collapse${pstatus.count}">${problem.problemName}</a></h4></td>
 								<td>
+								
 								<div class="filebox">
 								<input class="upload-name" value="파일선택" disabled="disabled">
 								<label for="ex_filename${pstatus.count}">업로드</label> 

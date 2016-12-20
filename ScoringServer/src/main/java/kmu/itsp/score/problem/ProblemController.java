@@ -19,17 +19,16 @@ public class ProblemController {
 	ProblemService service;
 
 	@RequestMapping(value = "/add/problem", method = RequestMethod.POST)
-	public String uploadProblemAnswer(ProblemInfoBean problemInfo) {
+	public String uploadProblemAnswer(ProblemInfoBean problemInfo, Integer compilerIdx) {
 
 		String[] inputValues = problemInfo.getInputValue();
 		System.out.println(problemInfo.getProjectIdx());
 		System.out.println(problemInfo.getProblemName());
 		// System.out.println(probInfo.getSourceFile().getSize());
 
-		if (service.registProblem(problemInfo)) {
+		if (service.registProblem(problemInfo,compilerIdx)) {
 			// go to read problem page
-			return "redirect:/read/problems?projectIdx="
-					+ problemInfo.getProblemIdx();
+			return "redirect:/read/problems";
 		}
 
 		return "problem/ProblemUpload";

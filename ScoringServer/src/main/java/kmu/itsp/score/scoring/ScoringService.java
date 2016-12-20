@@ -11,6 +11,6 @@ public interface ScoringService {
 
 	ScoringReadResponseBean readResult(int userIdx, int problemIdx);
 
-	List<ScoringReadResponseBean> readResults(int userIdx);
+	List<ScoringReadResponseBean> readResults(int projectIdx, int userIdx);
 
 }

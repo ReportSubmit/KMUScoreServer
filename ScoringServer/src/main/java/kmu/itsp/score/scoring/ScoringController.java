@@ -47,6 +47,7 @@ public class ScoringController {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			ResponseEntity<String> responseEntity = new ResponseEntity<String>(
 					"소스코드 재확인해주세요", HttpStatus.BAD_REQUEST);
 			return responseEntity;
@@ -86,7 +87,7 @@ public class ScoringController {
 		System.out.println("in scoringRead");
 
 		List<ScoringReadResponseBean> scoreReadBeanList = service
-				.readResults(userDetail.getUserIdx());
+				.readResults(userDetail.getProjectIdx(),userDetail.getUserIdx());
 
 		model.addAttribute("scoreResults", scoreReadBeanList);
 

@@ -19,6 +19,7 @@ public interface ProblemDAO extends CommonDAO{
 	int getLastProblemIdx();
 	List<AnswerEntity> findAnswerList(int problemIdx);
 	List<ProblemInputEntity> findInputList(int problemIdx);
+	List<ProblemEntity> findAllProblemListByProject(int projectIdx);
 	
 }
 

@@ -3,13 +3,13 @@ package kmu.itsp.score.initctrl;
 import java.io.File;
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.List;
 
-import javax.servlet.http.HttpSession;
+import kmu.itsp.score.project.ProjectService;
+import kmu.itsp.score.project.entity.ProjectEntity;
 
-import kmu.itsp.score.user.ScoreUser;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class FirstPageController {
 
+	@Autowired
+	private ProjectService projectService;
+	
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
 	public String viewMainPage(Model model,Principal principal) {
 
@@ -76,6 +79,10 @@ public class FirstPageController {
 	@RequestMapping(value = "/admin/prob/upload", method = RequestMethod.GET)
 	public String viewAdminProbUpload(Model model) {
 
+		List<ProjectEntity> projects=projectService.getProjectList();
+		
+		model.addAttribute("projects", projects);
+		
 		return "problem/ProblemUpload";
 	}
 

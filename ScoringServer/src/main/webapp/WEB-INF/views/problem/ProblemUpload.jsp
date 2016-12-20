@@ -204,11 +204,22 @@
 				<div class="col-md-8">
 
 					<div class="bs-callout bs-callout-danger">
-						<h4>과목 선택</h4>
-						<select class="form-control" name="projectIdx">
-							<option value="1">전산학실습</option>
-							<option value="2">프로그래밍언어</option>
-						</select>
+						<h4>과목/컴파일러 선택</h4>
+						<div class="row">
+							<div class="col-md-6">
+
+								<select class="form-control" name="projectIdx">
+									<c:forEach items="${projects}" var="project">
+										<option value="${project.projectIdx}">${project.projectName}</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="col-md-4">
+								<select class="form-control" name="compilerIdx">
+									<option value="1">C</option>
+								</select>
+							</div>
+						</div>
 					</div>
 					<div class="bs-callout bs-callout-danger">
 						<h4>문제 제목</h4>

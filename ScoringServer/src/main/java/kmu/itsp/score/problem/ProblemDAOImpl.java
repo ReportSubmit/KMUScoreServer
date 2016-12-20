@@ -50,12 +50,14 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 
 	@Override
 	public boolean addInputs(int problemIdx, String[] inputValues) {
-		for (int i = 0; i < inputValues.length; i++) {
-			ProblemInputEntity entity = new ProblemInputEntity();
-			entity.setProblemIdx(problemIdx);
-			entity.setInputNo(i + 1);
-			entity.setInput(inputValues[i]);
-			persist(entity);
+		if (inputValues != null) {
+			for (int i = 0; i < inputValues.length; i++) {
+				ProblemInputEntity entity = new ProblemInputEntity();
+				entity.setProblemIdx(problemIdx);
+				entity.setInputNo(i + 1);
+				entity.setInput(inputValues[i]);
+				persist(entity);
+			}
 		}
 		return true;
 	}
@@ -91,6 +93,21 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 		// limit
 		criteria.setFirstResult((pageIdx - 1) * entitySize);
 		criteria.setMaxResults(pageIdx * (entitySize));
+
+		return criteria.list();
+	}
+	
+	@Override
+	public List<ProblemEntity> findAllProblemListByProject(int projectIdx) {
+		// TODO Auto-generated method stub
+
+		Criteria criteria = getSession().createCriteria(ProblemEntity.class);
+
+		// compare id
+		if(projectIdx != 100){
+			criteria.add(Restrictions.eq("projectIdx", projectIdx));
+		}
+		criteria.addOrder(Order.desc("problemIdx"));
 
 		return criteria.list();
 	}

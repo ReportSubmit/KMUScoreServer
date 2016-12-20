@@ -8,7 +8,7 @@ import kmu.itsp.score.problem.entity.ProblemInputEntity;
 
 public interface ProblemService {
 
-	boolean registProblem(ProblemInfoBean probInfo);
+	boolean registProblem(ProblemInfoBean probInfo, int compilerIdx);
 
 	List<ProblemEntity> getProblemList(int projectIdx, int pageIdx, int entitySize);
 	List<AnswerEntity> getAnswerList(int problemIdx);
