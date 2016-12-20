@@ -35,7 +35,7 @@ public class ProblemServiceImpl implements ProblemService {
 
 		int nextProblemIdx = dao.getLastProblemIdx() + 1;
 
-		dao.addProblemEntity(problemInfo.getProjectIdx(),
+		dao.addProblemEntity(problemInfo.getProjectIdx(),nextProblemIdx,
 				problemInfo.getProblemName(), problemInfo.getProblemContents());
 
 		System.out.println(nextProblemIdx);
@@ -144,6 +144,16 @@ public class ProblemServiceImpl implements ProblemService {
 		// TODO Auto-generated method stub
 		List<AnswerEntity> answerList = dao.findAnswerList(problemIdx);
 		return answerList;
+	}
+
+	@Override
+	@Transactional(rollbackFor = HibernateException.class)
+	public boolean removeProblem(int problemIdx) {
+		// TODO Auto-generated method stub
+		if(!dao.deleteProblem(problemIdx)){
+			return false;
+		}
+		return true;
 	}
 
 }

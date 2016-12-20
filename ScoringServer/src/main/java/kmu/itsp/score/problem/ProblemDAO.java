@@ -9,7 +9,7 @@ import kmu.itsp.score.problem.entity.ProblemInputEntity;
 
 public interface ProblemDAO extends CommonDAO{
 	
-	boolean addProblemEntity(int projectIdx, String problemName, String problemContents);
+	boolean addProblemEntity(int projectIdx, int nextProblemIdx, String problemName, String problemContents);
 	boolean addInputs(int problemIdx, String[] inputValues);
 	boolean addAnswer(int problemIdx, AnswerEntity answerEntity);
 	List<ProblemEntity> findProblemList(int projectIdx, int pageIdx, int entitySize);

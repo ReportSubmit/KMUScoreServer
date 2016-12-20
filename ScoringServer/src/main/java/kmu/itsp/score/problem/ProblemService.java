@@ -15,4 +15,6 @@ public interface ProblemService {
 
 	List<ProblemInputEntity> getInputList(int problemIdx);
 
+	boolean removeProblem(int problemIdx);
+
 }
