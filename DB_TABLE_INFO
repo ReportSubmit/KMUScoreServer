@@ -1,0 +1,58 @@
+DB TABLE
+
+CREATE TABLE `tb_user` (
+  `user_idx` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(20) NOT NULL,
+  `user_pwd` varchar(15) NOT NULL,
+  `project_idx` int(11) unsigned NOT NULL,
+  `user_grade` int(1) NOT NULL DEFAULT '2',
+  PRIMARY KEY (`user_idx`),
+  UNIQUE KEY `useridx` (`user_id`),
+  KEY `project_user` (`project_idx`),
+  CONSTRAINT `project_user` FOREIGN KEY (`project_idx`) REFERENCES `tb_project` (`project_idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tb_result` (
+  `user_idx` int(11) unsigned NOT NULL,
+  `problem_idx` int(11) unsigned NOT NULL,
+  `no` int(11) NOT NULL,
+  `score` int(3) unsigned NOT NULL,
+  PRIMARY KEY (`user_idx`,`problem_idx`,`no`),
+  KEY `problem_result` (`problem_idx`),
+  KEY `answer_result` (`no`),
+  CONSTRAINT `problem_result` FOREIGN KEY (`problem_idx`) REFERENCES `tb_problem` (`problem_idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tb_project` (
+  `project_idx` int(11) unsigned NOT NULL,
+  `project_name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`project_idx`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tb_problem` (
+  `project_idx` int(11) unsigned NOT NULL,
+  `problem_idx` int(11) unsigned NOT NULL,
+  `problem_name` varchar(100) NOT NULL,
+  `problem_contents` text,
+  PRIMARY KEY (`problem_idx`,`project_idx`),
+  KEY `project_problem` (`project_idx`),
+  CONSTRAINT `project_problem` FOREIGN KEY (`project_idx`) REFERENCES `tb_project` (`project_idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tb_input` (
+  `problem_idx` int(11) unsigned NOT NULL,
+  `no` int(11) NOT NULL,
+  `input` text NOT NULL,
+  PRIMARY KEY (`problem_idx`,`no`),
+  CONSTRAINT `problem_input` FOREIGN KEY (`problem_idx`) REFERENCES `tb_problem` (`problem_idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tb_answer` (
+  `problem_idx` int(11) unsigned NOT NULL,
+  `answer_line` int(11) NOT NULL,
+  `no` int(11) NOT NULL,
+  `answer` text NOT NULL,
+  PRIMARY KEY (`no`,`problem_idx`),
+  KEY `problemIdx` (`problem_idx`),
+  CONSTRAINT `problem_answer` FOREIGN KEY (`problem_idx`) REFERENCES `tb_problem` (`problem_idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
