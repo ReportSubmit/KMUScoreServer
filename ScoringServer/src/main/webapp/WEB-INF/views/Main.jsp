@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@include file="./include/tags.jsp"%>
+<%@include file="include/tags.jsp"%>
 
 <!DOCTYPE html>
 <html>
@@ -45,11 +45,11 @@
 					<!-- Wrapper for slides -->
 					<div class="carousel-inner" role="listbox">
 						<div class="item active">
-							<img src="..." alt="...">
+							<img src="" alt="...">
 							<div class="carousel-caption">...</div>
 						</div>
 						<div class="item">
-							<img src="..." alt="...">
+							<img src="" alt="...">
 							<div class="carousel-caption">...</div>
 						</div>
 						...

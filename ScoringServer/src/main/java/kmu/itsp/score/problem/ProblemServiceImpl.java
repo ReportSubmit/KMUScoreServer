@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import kmu.itsp.score.core.process.CompileResultBean;
 import kmu.itsp.score.core.process.IProcessService;
 import kmu.itsp.score.core.process.ProcessServiceFactory;
 import kmu.itsp.score.core.util.FileManager;
 import kmu.itsp.score.problem.entity.AnswerEntity;
 import kmu.itsp.score.problem.entity.ProblemEntity;
 import kmu.itsp.score.problem.entity.ProblemInputEntity;
-import kmu.itsp.score.scoring.temp.CompileResultBean;
 
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +29,13 @@ public class ProblemServiceImpl implements ProblemService {
 	private @Value("${path.temp_dir_path}") String tempDirPath;
 
 	@Override
-	@Transactional(rollbackFor=HibernateException.class)
-	public boolean registProblem(ProblemInfoBean problemInfo){
+	@Transactional(rollbackFor = HibernateException.class)
+	public boolean registProblem(ProblemInfoBean problemInfo, int compilerIdx) {
 		// TODO Auto-generated method stub
 
 		int nextProblemIdx = dao.getLastProblemIdx() + 1;
 
-		dao.addProblemEntity(problemInfo.getProjectIdx(),
+		dao.addProblemEntity(problemInfo.getProjectIdx(),nextProblemIdx,
 				problemInfo.getProblemName(), problemInfo.getProblemContents());
 
 		System.out.println(nextProblemIdx);
@@ -61,12 +61,16 @@ public class ProblemServiceImpl implements ProblemService {
 
 		try {
 			IProcessService processService = processFactory
-					.getInstance(problemInfo.getProjectIdx());
+					.getInstance(compilerIdx);
 
 			CompileResultBean compileResult = processService.complie(file);
 
 			if (compileResult.getStatus() == IProcessService.COMPILE_SUCCESS) {
 				String inputs[] = problemInfo.getInputValue();
+				if(inputs == null){
+					inputs = new String[1];
+					inputs[0] = "";
+				}
 				for (int i = 0; i < inputs.length; i++) {
 					int status = processService.runExcuteFile(inputs[i],
 							compileResult.getFileName(),
@@ -102,6 +106,7 @@ public class ProblemServiceImpl implements ProblemService {
 						return false;
 					}
 				}
+
 			} else {
 				return false;
 			}
@@ -117,6 +122,14 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Override
 	@Transactional
+	public List<ProblemEntity> getProblemList(int projectIdx) {
+		// TODO Auto-generated method stub
+		List<ProblemEntity> problemList = dao.findProblemList(projectIdx);
+		return problemList;
+	}
+	
+	@Override
+	@Transactional
 	public List<ProblemEntity> getProblemList(int projectIdx, int pageIdx,
 			int entitySize) {
 		// TODO Auto-generated method stub
@@ -126,7 +139,7 @@ public class ProblemServiceImpl implements ProblemService {
 	}
 
 	@Override
-	@Transactional(rollbackFor=HibernateException.class)
+	@Transactional(rollbackFor = HibernateException.class)
 	public List<ProblemInputEntity> getInputList(int problemIdx) {
 		// TODO Auto-generated method stub
 		List<ProblemInputEntity> inputList = dao.findInputList(problemIdx);
@@ -134,11 +147,23 @@ public class ProblemServiceImpl implements ProblemService {
 	}
 
 	@Override
-	@Transactional(rollbackFor=HibernateException.class)
+	@Transactional(rollbackFor = HibernateException.class)
 	public List<AnswerEntity> getAnswerList(int problemIdx) {
 		// TODO Auto-generated method stub
 		List<AnswerEntity> answerList = dao.findAnswerList(problemIdx);
 		return answerList;
 	}
+
+	@Override
+	@Transactional(rollbackFor = HibernateException.class)
+	public boolean removeProblem(int problemIdx) {
+		// TODO Auto-generated method stub
+		if(!dao.deleteProblem(problemIdx)){
+			return false;
+		}
+		return true;
+	}
+
+	
 
 }

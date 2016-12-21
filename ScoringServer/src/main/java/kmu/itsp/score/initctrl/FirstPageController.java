@@ -4,12 +4,7 @@ import java.io.File;
 import java.security.Principal;
 import java.util.Arrays;
 
-import javax.servlet.http.HttpSession;
-
-import kmu.itsp.score.user.ScoreUser;
-
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,14 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 public class FirstPageController {
-	// User infomation DAO
 
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
-
+	
+	
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
-	public String viewMainPage(Model model, HttpSession session, Principal principal) {
+	public String viewMainPage(Model model,Principal principal) {
 
 		return "Main";
 	}
@@ -46,7 +38,7 @@ public class FirstPageController {
 			System.out.println("error");
 		}
 
-		return "student/CodeTestPage";
+		return "test/CodeTestPage";
 	}
 
 	// 나중에 주소를 /user/score/upload로 변경할것!
@@ -62,26 +54,20 @@ public class FirstPageController {
 			System.out.println("error");
 		}
 
-		return "student/ScoreUploadPage";
+		return "test/ScoreUploadPage";
 	}
 
 	// 나중에 주소를 /user/score/admin/upload로 변경할것!
 	@RequestMapping(value = "/ans/upload", method = RequestMethod.GET)
 	public String viewAdminUploadPage(Model model) {
 
-		return "admin/AnsUploadPage";
+		return "test/AnsUploadPage";
 	}
 
 	@RequestMapping(value = "/export/choose", method = RequestMethod.GET)
 	public String viewAdminChooseExportPage(Model model) {
 
-		return "admin/ChooseExportPage";
-	}
-
-	@RequestMapping(value = "/prob/upload", method = RequestMethod.GET)
-	public String viewAdminProbUpload(Model model) {
-
-		return "admin/ProblemUpload";
+		return "export/ChooseExportPage";
 	}
 
 	@RequestMapping(value = "/test/ajaxForm", method = RequestMethod.GET)

@@ -2,7 +2,6 @@ package kmu.itsp.score.problem;
 
 import java.util.List;
 
-import kmu.itsp.score.core.dao.CommonDAO;
 import kmu.itsp.score.core.dao.CommonDAOImpl;
 import kmu.itsp.score.problem.entity.AnswerEntity;
 import kmu.itsp.score.problem.entity.ProblemEntity;
@@ -13,19 +12,18 @@ import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Repository
 public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 
 	@Override
-	public boolean addProblemEntity(int projectIdx, String problemName,
+	public boolean addProblemEntity(int projectIdx,int problemIdx, String problemName,
 			String problemContents) {
 
 		ProblemEntity entity = new ProblemEntity();
 		entity.setProjectIdx(projectIdx);
+		entity.setProblemIdx(problemIdx);
 		entity.setProblemName(problemName);
 		entity.setProblemContents(problemContents);
 		persist(entity);
@@ -50,12 +48,14 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 
 	@Override
 	public boolean addInputs(int problemIdx, String[] inputValues) {
-		for (int i = 0; i < inputValues.length; i++) {
-			ProblemInputEntity entity = new ProblemInputEntity();
-			entity.setProblemIdx(problemIdx);
-			entity.setInputNo(i + 1);
-			entity.setInput(inputValues[i]);
-			persist(entity);
+		if (inputValues != null) {
+			for (int i = 0; i < inputValues.length; i++) {
+				ProblemInputEntity entity = new ProblemInputEntity();
+				entity.setProblemIdx(problemIdx);
+				entity.setInputNo(i + 1);
+				entity.setInput(inputValues[i]);
+				persist(entity);
+			}
 		}
 		return true;
 	}
@@ -73,6 +73,24 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 	}
 
 	@Override
+	public ProblemEntity findProblem(int problemIdx){
+		// TODO Auto-generated method stub
+
+		Criteria criteria = getSession().createCriteria(ProblemEntity.class);
+
+		// compare id
+		
+		criteria.add(Restrictions.eq("problemIdx", problemIdx));
+		
+		Object object = criteria.uniqueResult();
+		if(object != null){
+			return (ProblemEntity) criteria.uniqueResult();
+		}else{
+			return null;
+		}
+	}
+	
+	@Override
 	public List<ProblemEntity> findProblemList(int projectIdx, int pageIdx,
 			int entitySize) {
 		// TODO Auto-generated method stub
@@ -83,7 +101,7 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 		Criteria criteria = getSession().createCriteria(ProblemEntity.class);
 
 		// compare id
-		if(projectIdx != 10){
+		if(projectIdx != 100){
 			criteria.add(Restrictions.eq("projectIdx", projectIdx));
 		}
 		criteria.addOrder(Order.desc("problemIdx"));
@@ -96,15 +114,46 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 	}
 
 	@Override
-	public ProblemEntity findProblem(int problemIdx) {
+	public List<ProblemEntity> findProblemList(int projectIdx) {
 		// TODO Auto-generated method stub
-		return null;
+
+		Criteria criteria = getSession().createCriteria(ProblemEntity.class);
+
+		// compare id
+		if(projectIdx != 100){
+			criteria.add(Restrictions.eq("projectIdx", projectIdx));
+		}
+		criteria.addOrder(Order.asc("problemIdx"));
+
+		return criteria.list();
+
+	}
+	
+	@Override
+	public List<ProblemEntity> findAllProblemListByProject(int projectIdx) {
+		// TODO Auto-generated method stub
+
+		Criteria criteria = getSession().createCriteria(ProblemEntity.class);
+
+		// compare id
+		if(projectIdx != 100){
+			criteria.add(Restrictions.eq("projectIdx", projectIdx));
+		}
+		criteria.addOrder(Order.desc("problemIdx"));
+
+		return criteria.list();
 	}
 
 	@Override
 	public boolean deleteProblem(int problemIdx) {
 		// TODO Auto-generated method stub
-		return false;
+		ProblemEntity entity = findProblem(problemIdx);
+		if(entity != null){
+			delete(entity);
+		}else{
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -145,5 +194,6 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 		}
 		return inputList;
 	}
+
 
 }

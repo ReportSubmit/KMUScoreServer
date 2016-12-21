@@ -7,15 +7,15 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
+import kmu.itsp.score.core.process.CompileResultBean;
 import kmu.itsp.score.core.process.IProcessService;
 import kmu.itsp.score.core.process.ProcessServiceFactory;
 import kmu.itsp.score.core.util.ScoreUtil;
 import kmu.itsp.score.problem.ProblemDAO;
 import kmu.itsp.score.problem.entity.AnswerEntity;
+import kmu.itsp.score.problem.entity.ProblemEntity;
 import kmu.itsp.score.problem.entity.ProblemInputEntity;
 import kmu.itsp.score.scoring.entity.ScoringTotalEntity;
-import kmu.itsp.score.scoring.temp.CompileResultBean;
-import kmu.itsp.score.scoring.temp.ScoreResultBean;
 import kmu.itsp.score.user.UserInfoDAO;
 
 import org.hibernate.HibernateException;
@@ -52,18 +52,12 @@ public class ScoringServiceImpl implements ScoringService {
 	private @Value("${path.temp_dir_path}") String tempDirPath;
 
 	@Override
-	public ScoreResultBean scoringUploadFile(File file, String probName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	@Transactional
-	public List<ScoringResultBean> scoringSourceFile(int projectIdx,
+	public List<ScoringResultBean> scoringSourceFile(
 			ScoringRequestInfoBean requestInfo) {
 		// TODO Auto-generated method stub
 
-		IProcessService processService = processfactory.getInstance(projectIdx);
+		IProcessService processService = processfactory.getInstance(requestInfo.getCompilerIdx());
 
 		File file = null;
 		List<ScoringResultBean> scoringResultBeanList = new ArrayList<ScoringResultBean>();
@@ -74,7 +68,7 @@ public class ScoringServiceImpl implements ScoringService {
 			requestInfo.getSourceFile().transferTo(file);
 			System.out.println(file.getAbsolutePath());
 			CompileResultBean compileResult = processService.complie(file);
-
+			
 			if (compileResult.getStatus() == IProcessService.COMPILE_SUCCESS) {
 
 				List<ProblemInputEntity> inputList = problemDao
@@ -92,7 +86,7 @@ public class ScoringServiceImpl implements ScoringService {
 					status = processService.runExcuteFile(input,
 							compileResult.getFileName(),
 							processService.getExcuteDirPath());
-
+					
 					ScoringResultBean scoringResultBean = new ScoringResultBean();
 					scoringResultBean.setNo(i + 1);
 					scoringResultBean.setInput(input);
@@ -229,19 +223,18 @@ public class ScoringServiceImpl implements ScoringService {
 
 	@Override
 	@Transactional
-	public List<ScoringReadResponseBean> readResults(int userIdx) {
+	public List<ScoringReadResponseBean> readResults(int projectIdx, int userIdx) {
 		// TODO Auto-generated method stub
-		int endProblemIdx = problemDao.getLastProblemIdx();
+		List<ProblemEntity> problems = problemDao.findAllProblemListByProject(projectIdx);
 		List<ScoringReadResponseBean> scoreReadBeanList = new ArrayList<ScoringReadResponseBean>();
-		System.out.println(endProblemIdx);
 
-		for (int i = 0; i <= endProblemIdx; i++) {
+		for (int i = 0; i < problems.size(); i++) {
 
 			List<ScoringTotalEntity> entitys = scoringDao.findScoringTotalResult(
-					userIdx, i);
+					userIdx, problems.get(i).getProblemIdx());
 			if(entitys != null && !entitys.isEmpty()){
 				ScoringReadResponseBean scoreReadBean = new ScoringReadResponseBean();
-				scoreReadBean.setProblemIdx(i);
+				scoreReadBean.setProblemIdx(problems.get(i).getProblemIdx());
 				scoreReadBean.setInfos(entitys);
 				scoreReadBeanList.add(scoreReadBean);
 			}

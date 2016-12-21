@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>로그인</title>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
@@ -42,7 +42,7 @@
 					method="post">
 					<sec:csrfInput />
 					<div class="form-group">
-						<label for="id">이메일</label><input type="text" name="username"
+						<label for="id">아이디</label><input type="text" name="username"
 							class="form-control" placeholder="아이디">
 					</div>
 					<div class="form-group">

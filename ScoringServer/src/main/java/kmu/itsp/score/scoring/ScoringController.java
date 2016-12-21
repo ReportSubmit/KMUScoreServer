@@ -22,7 +22,7 @@ public class ScoringController {
 	@Qualifier("ScoringService")
 	ScoringService service;
 
-	@RequestMapping(value = "/ajax/scoring/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/ajax/add/scoring", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<String> addScoringResult(
 			ScoringRequestInfoBean requestInfo) {
 
@@ -35,8 +35,8 @@ public class ScoringController {
 		}
 		try {
 
-			List<ScoringResultBean> scoringResults = service.scoringSourceFile(
-					userDetail.getProjectIdx(), requestInfo);
+			List<ScoringResultBean> scoringResults = service
+					.scoringSourceFile(requestInfo);
 			// for(ScoringResultBean result : scoringResults){
 			// System.out.println(result.getNo()+":"+result.getMsg()+":"+
 			// result.getScore());
@@ -44,9 +44,10 @@ public class ScoringController {
 
 			service.registResult(userDetail.getUserIdx(), requestInfo,
 					scoringResults);
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			ResponseEntity<String> responseEntity = new ResponseEntity<String>(
 					"소스코드 재확인해주세요", HttpStatus.BAD_REQUEST);
 			return responseEntity;
@@ -54,13 +55,14 @@ public class ScoringController {
 
 		ResponseEntity<String> responseEntity = new ResponseEntity<String>(
 				"OK", HttpStatus.OK);
-		
+
 		return responseEntity;
 
 	}
 
-	@RequestMapping(value = "/ajax/scoring/read", method = RequestMethod.GET)
-	public @ResponseBody ScoringReadResponseBean readScoringResult(int problemIdx) {
+	@RequestMapping(value = "/ajax/read/scoring", method = RequestMethod.GET)
+	public @ResponseBody ScoringReadResponseBean readScoringResult(
+			int problemIdx) {
 		Object principal = SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 
@@ -72,7 +74,7 @@ public class ScoringController {
 		return service.readResult(userDetail.getUserIdx(), problemIdx);
 	}
 
-	@RequestMapping(value = "/scoring/read/all", method = RequestMethod.GET)
+	@RequestMapping(value = "/read/scoring/all", method = RequestMethod.GET)
 	public String readScoringResults(Model model) {
 
 		Object principal = SecurityContextHolder.getContext()
@@ -85,10 +87,10 @@ public class ScoringController {
 		System.out.println("in scoringRead");
 
 		List<ScoringReadResponseBean> scoreReadBeanList = service
-				.readResults(userDetail.getUserIdx());
+				.readResults(userDetail.getProjectIdx(),userDetail.getUserIdx());
 
 		model.addAttribute("scoreResults", scoreReadBeanList);
 
-		return "admin/ProblemBoard";
+		return "problem/ProblemBoard";
 	}
 }

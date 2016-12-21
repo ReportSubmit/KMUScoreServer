@@ -1,6 +1,5 @@
-package kmu.itsp.score.scoring.temp;
+package kmu.itsp.score.core.process;
 
-import kmu.itsp.score.core.process.IProcessService;
 import kmu.itsp.score.core.util.ScoreUtil;
 
 public class CompileResultBean {

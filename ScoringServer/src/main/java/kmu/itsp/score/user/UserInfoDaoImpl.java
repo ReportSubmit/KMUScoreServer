@@ -1,13 +1,17 @@
 package kmu.itsp.score.user;
 
+import java.util.List;
+
 import javax.inject.Named;
 
 import kmu.itsp.score.core.dao.CommonDAOImpl;
 import kmu.itsp.score.user.entity.UserInfoEntity;
+import kmu.itsp.score.user.entity.UserIDEntity;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +57,18 @@ public class UserInfoDaoImpl extends CommonDAOImpl implements UserInfoDAO {
 			// TODO: handle exception
 			return 0;
 		}
+	}
+
+	@Override
+	public List<UserIDEntity> findUserIDList(Integer projectIdx) {
+		// TODO Auto-generated method stub
+		Criteria criteria = getSession().createCriteria(UserIDEntity.class);
+		criteria.add(Restrictions.eq("projectIdx", projectIdx));
+		criteria.addOrder(Order.asc("userIdx"));
+		
+		List<UserIDEntity> entitys = (List<UserIDEntity>) criteria.list();
+
+		return entitys;
 	}
 	
 }
