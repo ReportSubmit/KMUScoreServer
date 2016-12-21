@@ -20,10 +20,14 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 <!-- 부가적인 테마 -->
-<link rel="stylesheet" href="/score/resources/css/table.css">
-<link rel="stylesheet" href="/score/resources/css/button.css">
-<link rel="stylesheet" href="/score/resources/css/input.css">
-<link rel="stylesheet" href="/score/resources/css/label.css">
+<link rel="stylesheet"
+	href="<c:url value="/resources/css/table.css"/>">
+<link rel="stylesheet"
+	href="<c:url value="/resources/css/button.css"/>">
+	<link rel="stylesheet"
+	href="<c:url value="/resources/css/label.css"/>">
+<link rel="stylesheet"
+	href="<c:url value="/resources/css/input.css"/>">
 
 <script type="text/javascript">
 	$(document).ready(function() {

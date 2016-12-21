@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>파일 출력</title>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
@@ -18,8 +18,11 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 <!-- 부가적인 테마 -->
-<link rel="stylesheet" href="/score/resources/css/table.css">
-<link rel="stylesheet" href="/score/resources/css/button.css">
+<link rel="stylesheet"
+	href="<c:url value="/resources/css/table.css"/>">
+<link rel="stylesheet"
+	href="<c:url value="/resources/css/button.css"/>">
+
 <style type="text/css">
 .bs-callout {
 	padding: 20px;

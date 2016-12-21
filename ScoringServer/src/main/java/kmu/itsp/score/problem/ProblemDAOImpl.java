@@ -1,5 +1,6 @@
 package kmu.itsp.score.problem;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import kmu.itsp.score.core.dao.CommonDAOImpl;
@@ -96,7 +97,7 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 		// TODO Auto-generated method stub
 
 		System.out.println(projectIdx + ":" + pageIdx + ":" + entitySize + ":"
-				+ pageIdx * (entitySize - 1) + ":" + pageIdx * (entitySize));
+				+ (pageIdx-1) * (entitySize) + ":" + pageIdx * (entitySize));
 
 		Criteria criteria = getSession().createCriteria(ProblemEntity.class);
 
@@ -193,6 +194,26 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 			System.out.println(inputList.get(i).getInput());
 		}
 		return inputList;
+	}
+
+	@Override
+	public int getNumberOfProblems(int projectIdx) {
+		// TODO Auto-generated method stub
+		String where = "WHERE project_idx="+projectIdx;
+		if(projectIdx == 100){
+			where ="";
+		}
+		SQLQuery query = getSession()
+				.createSQLQuery(
+						"SELECT Count(problem_idx) FROM tb_problem " +where);
+		try {
+			 
+			return ((BigInteger)query.uniqueResult()).intValue();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return 0;
+		}
 	}
 
 

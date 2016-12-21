@@ -164,6 +164,14 @@ public class ProblemServiceImpl implements ProblemService {
 		return true;
 	}
 
+	@Override
+	@Transactional
+	public int getNumberOfProblems(int projectIdx) {
+		// TODO Auto-generated method stub
+		
+		return dao.getNumberOfProblems(projectIdx);
+	}
+
 	
 
 }
