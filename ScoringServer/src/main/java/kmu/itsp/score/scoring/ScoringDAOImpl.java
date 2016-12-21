@@ -92,8 +92,6 @@ public class ScoringDAOImpl extends CommonDAOImpl implements ScoringDAO {
 			System.out.println(scoringList.get(i).getScore());
 			
 		}
-
-		
 		
 		return scoringList;
 	}

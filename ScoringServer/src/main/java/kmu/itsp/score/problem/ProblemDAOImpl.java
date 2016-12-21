@@ -112,6 +112,22 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 
 		return criteria.list();
 	}
+
+	@Override
+	public List<ProblemEntity> findProblemList(int projectIdx) {
+		// TODO Auto-generated method stub
+
+		Criteria criteria = getSession().createCriteria(ProblemEntity.class);
+
+		// compare id
+		if(projectIdx != 100){
+			criteria.add(Restrictions.eq("projectIdx", projectIdx));
+		}
+		criteria.addOrder(Order.asc("problemIdx"));
+
+		return criteria.list();
+
+	}
 	
 	@Override
 	public List<ProblemEntity> findAllProblemListByProject(int projectIdx) {
@@ -178,5 +194,6 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 		}
 		return inputList;
 	}
+
 
 }

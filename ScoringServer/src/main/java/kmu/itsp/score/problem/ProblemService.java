@@ -10,11 +10,13 @@ public interface ProblemService {
 
 	boolean registProblem(ProblemInfoBean probInfo, int compilerIdx);
 
+	List<ProblemEntity> getProblemList(int projectIdx);
 	List<ProblemEntity> getProblemList(int projectIdx, int pageIdx, int entitySize);
 	List<AnswerEntity> getAnswerList(int problemIdx);
 
 	List<ProblemInputEntity> getInputList(int problemIdx);
 
 	boolean removeProblem(int problemIdx);
+
 
 }

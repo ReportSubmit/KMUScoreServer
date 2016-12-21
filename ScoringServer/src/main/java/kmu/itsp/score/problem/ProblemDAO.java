@@ -12,6 +12,7 @@ public interface ProblemDAO extends CommonDAO{
 	boolean addProblemEntity(int projectIdx, int nextProblemIdx, String problemName, String problemContents);
 	boolean addInputs(int problemIdx, String[] inputValues);
 	boolean addAnswer(int problemIdx, AnswerEntity answerEntity);
+	List<ProblemEntity> findProblemList(int projectIdx);
 	List<ProblemEntity> findProblemList(int projectIdx, int pageIdx, int entitySize);
 	ProblemEntity findProblem(int problemIdx);
 	boolean deleteProblem(int problemIdx);
@@ -20,6 +21,7 @@ public interface ProblemDAO extends CommonDAO{
 	List<AnswerEntity> findAnswerList(int problemIdx);
 	List<ProblemInputEntity> findInputList(int problemIdx);
 	List<ProblemEntity> findAllProblemListByProject(int projectIdx);
+	
 	
 }
 

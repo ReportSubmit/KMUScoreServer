@@ -22,7 +22,8 @@ function submit()
 
 						<li><a href="<c:url value="/read/problems"/>">문제풀이</a></li>
 						<sec:authorize access="hasRole('ROLE_ADMIN')">
-							<li><a href="<c:url value="/admin/prob/upload"/>">문제업로드</a></li>
+							<li><a href="<c:url value="/admin/upload/problem"/>">문제업로드</a></li>
+							<li><a href="<c:url value="/admin/choose/export_file"/>">파일출력</a></li>
 						</sec:authorize>
 					</ul>
 
