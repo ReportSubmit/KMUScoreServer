@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ProblemController {
 	@Autowired
-	private ProblemService service;
+	private ProblemService problemService;
 
 	@Autowired
 	private ProjectService projectService;
@@ -45,7 +45,7 @@ public class ProblemController {
 		System.out.println(problemInfo.getProblemName());
 		// System.out.println(probInfo.getSourceFile().getSize());
 
-		if (service.registProblem(problemInfo, compilerIdx)) {
+		if (problemService.registProblem(problemInfo, compilerIdx)) {
 			// go to read problem page
 			return "redirect:/read/problems";
 		}
@@ -55,7 +55,7 @@ public class ProblemController {
 
 	@RequestMapping(value = "/read/problems", method = RequestMethod.GET)
 	public String readProblems(
-			@RequestParam(value = "pageIdx", defaultValue = "0") int pageIdx,
+			@RequestParam(value = "pageIdx", defaultValue = "1") int pageIdx,
 			@RequestParam(value = "listSize", defaultValue = "10") int listSize,
 			Model model) {
 
@@ -67,9 +67,20 @@ public class ProblemController {
 			userDetail = (ScoreUser) principal;
 		}
 
-		List<ProblemEntity> problemList = service.getProblemList(
+		List<ProblemEntity> problemList = problemService.getProblemList(
 				userDetail.getProjectIdx(), pageIdx, listSize);
+		
+		
+		int totalProblemNumber = problemService.getNumberOfProblems(userDetail.getProjectIdx());
+		int totalPage = totalProblemNumber/listSize +1;
+		if(totalProblemNumber%listSize == 0){
+			totalPage -=1;
+		}
+		System.out.println(totalPage);
+		
 		model.addAttribute("problemList", problemList);
+		model.addAttribute("totalPage", totalPage);
+		model.addAttribute("pageIdx", pageIdx);
 		for (ProblemEntity problem : problemList) {
 			System.out.println(problem.getProblemName());
 		}
@@ -81,7 +92,7 @@ public class ProblemController {
 	@RequestMapping(value = "/ajax/remove/problem", method = RequestMethod.DELETE)
 	public @ResponseBody String removeProblem(Integer problemIdx) {
 
-		if (!service.removeProblem(problemIdx)) {
+		if (!problemService.removeProblem(problemIdx)) {
 			return "error";
 		}
 

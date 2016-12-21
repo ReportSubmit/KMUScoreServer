@@ -22,9 +22,11 @@
 
 <!-- 부가적인 테마 -->
 <link rel="stylesheet"
-	href="/score/resources/css/table.css">
+	href="<c:url value="/resources/css/table.css"/>">
 <link rel="stylesheet"
-	href="/score/resources/css/button.css">
+	href="<c:url value="/resources/css/button.css"/>">
+
+<script type="text/javascript" src="<c:url value="/resources/js/jquery.twbsPagination.js"/>"></script>
 
 <style type="text/css">
 .popover {
@@ -38,6 +40,7 @@
 		var contextPath = getContextPath();
 		var csrfHeader = $("meta[name='_csrf_header']").attr("content");
 		var csrfToken = $("meta[name='_csrf']").attr("content");
+		
 		
 	    $("button[name=confirm]").popover({
 	        html : true, 
@@ -177,6 +180,27 @@
 		    // 추출한 파일명 삽입
 		    $(this).siblings('.upload-name').val(filename);
 		  });
+		  
+		var startPage = parseInt($('#pageContent').text().replace(/[^0-9]/g,''));
+		var totalPage = parseInt($('#totalPage').val());
+		var initClick =0;
+		$('.sync-pagination').twbsPagination({
+	        totalPages: totalPage,
+	        startPage: startPage,
+	        onPageClick: function (evt, page) {
+	        	if(initClick == 0){
+	        		initClick++;
+	        		return null;
+	        	}
+	        	var origin = window.location.origin;
+		        var pathName = window.location.pathname;
+	            window.location.assign(origin+pathName+"?pageIdx="+page);
+	        	
+	        }
+	  	});
+	  	$('.page-item').eq(startPage+1).addClass('active');
+		  
+		  
 	});
 	function getContextPath(){
 	    var offset=location.href.indexOf(location.host)+location.host.length;
@@ -245,9 +269,10 @@ table td,th{
 	<div class="container">
 		<div class="row">
 			<div class="col-md-9">
-			<select id="complieOption" style="position:relative; float:right; width: 50px;">
-			<option value="1" selected="selected">C</option>
-			</select>
+				<select id="complieOption"
+					style="position: relative; float: right; width: 50px;">
+					<option value="1" selected="selected">C</option>
+				</select>
 			</div>
 		</div>
 		<div class="row">
@@ -261,68 +286,73 @@ table td,th{
 							<th>점수</th>
 							<th>결과</th>
 							<sec:authorize access="hasRole('ROLE_ADMIN')">
-							<th>삭제</th>
+								<th>삭제</th>
 							</sec:authorize>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${problemList}" var="problem" varStatus="pstatus">
+						<c:forEach items="${problemList}" var="problem"
+							varStatus="pstatus">
 							<tr id="tr_input${pstatus.count}">
-								<td><sec:authorize access="hasRole('ROLE_ADMIN')">${problem.projectIdx}</sec:authorize><input type="hidden" name="problemIdx"
-									value="${problem.problemIdx}"><h4><a data-toggle="collapse"
-									href="#collapse${pstatus.count}">${problem.problemName}</a></h4></td>
+								<td><sec:authorize access="hasRole('ROLE_ADMIN')">${problem.projectIdx}</sec:authorize><input
+									type="hidden" name="problemIdx" value="${problem.problemIdx}">
+								<h4>
+										<a data-toggle="collapse" href="#collapse${pstatus.count}">${problem.problemName}</a>
+									</h4></td>
 								<td>
-								
-								<div class="filebox">
-								<input class="upload-name" value="파일선택" disabled="disabled">
-								<label for="ex_filename${pstatus.count}">업로드</label> 
-								<input type="file" name="sourceFile" id="ex_filename${pstatus.count}" class="upload-hidden">
-								</div>
+
+									<div class="filebox">
+										<input class="upload-name" value="파일선택" disabled="disabled">
+										<label for="ex_filename${pstatus.count}">업로드</label> <input
+											type="file" name="sourceFile"
+											id="ex_filename${pstatus.count}" class="upload-hidden">
+									</div>
 								</td>
-								<td><button type="button" name="scoring" class="btn btn-info">채점</button></td>
-								<td title="score">
-								<c:forEach items="${scoreResults}" var="scoreResult">
-									<c:if test="${scoreResult.problemIdx == problem.problemIdx}">
-										<c:forEach items="${scoreResult.infos}" var="info" end="0">
-											<h4>${info.score}</h4>
-										</c:forEach>
-									</c:if>
-									</c:forEach>
-								</td>
-								<td title="result">	 
-								<c:forEach items="${scoreResults}" var="scoreResult">
-									<c:if test="${scoreResult.problemIdx == problem.problemIdx}">
-									<button type="button" name='confirm' class="btn btn-info">확인</button>
-									<div style="display: none;">
-									<table class="ui celled padded table">
-									<tr>
-										<th>번호</th>
-										<th>입력</th>
-										<th>점수</th>
-									</tr>
-									</c:if>
-								</c:forEach>
-								
-								
-								<c:forEach items="${scoreResults}" var="scoreResult">
-									<c:if test="${scoreResult.problemIdx == problem.problemIdx}">
-										<c:forEach items="${scoreResult.infos}" var="info" begin="1">
-										<tr>
-										<td>${info.scoreNo}</td>
-										<td>${info.input}</td>
-										<td>${info.score}</td>
-										</tr>
-										</c:forEach>
-										
-										</table>
-										</div>
-									</c:if>
-								</c:forEach>
-								</td>
+								<td><button type="button" name="scoring"
+										class="btn btn-info">채점</button></td>
+								<td title="score"><c:forEach items="${scoreResults}"
+										var="scoreResult">
+										<c:if test="${scoreResult.problemIdx == problem.problemIdx}">
+											<c:forEach items="${scoreResult.infos}" var="info" end="0">
+												<h4>${info.score}</h4>
+											</c:forEach>
+										</c:if>
+									</c:forEach></td>
+								<td title="result"><c:forEach items="${scoreResults}"
+										var="scoreResult">
+										<c:if test="${scoreResult.problemIdx == problem.problemIdx}">
+											<button type="button" name='confirm' class="btn btn-info">확인</button>
+											<div style="display: none;">
+												<table class="ui celled padded table">
+													<tr>
+														<th>번호</th>
+														<th>입력</th>
+														<th>점수</th>
+													</tr>
+													</c:if>
+													</c:forEach>
+
+
+													<c:forEach items="${scoreResults}" var="scoreResult">
+														<c:if
+															test="${scoreResult.problemIdx == problem.problemIdx}">
+															<c:forEach items="${scoreResult.infos}" var="info"
+																begin="1">
+																<tr>
+																	<td>${info.scoreNo}</td>
+																	<td>${info.input}</td>
+																	<td>${info.score}</td>
+																</tr>
+															</c:forEach>
+												</table>
+											</div>
+										</c:if>
+									</c:forEach></td>
 								<sec:authorize access="hasRole('ROLE_ADMIN')">
-								<td>
-								<button type="button" name="deleteProblem" class="btn btn-danger">삭제</button>
-								</td>
+									<td>
+										<button type="button" name="deleteProblem"
+											class="btn btn-danger">삭제</button>
+									</td>
 								</sec:authorize>
 							</tr>
 							<tr id="collapse${pstatus.count}" class="panel-collapse collapse">
@@ -333,8 +363,13 @@ table td,th{
 				</table>
 			</div>
 		</div>
-	</div>	
+		<div class="row">
+			<div class="col-md-offset-2 col-md-6" style="margin-top: 30px;">
+				<ul class="sync-pagination"></ul>
+			</div>
+			<div id="pageContent">Page ${pageIdx}</div>
+		</div>
+	</div>
+	<input id="totalPage" type="hidden" value="${totalPage}">
 </body>
-
-
 </html>

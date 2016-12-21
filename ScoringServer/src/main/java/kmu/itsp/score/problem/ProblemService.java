@@ -18,5 +18,8 @@ public interface ProblemService {
 
 	boolean removeProblem(int problemIdx);
 
+	int getNumberOfProblems(int projectIdx);
+	
+
 
 }
