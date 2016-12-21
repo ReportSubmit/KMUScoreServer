@@ -3,6 +3,8 @@ package kmu.itsp.score.problem;
 import java.util.List;
 
 import kmu.itsp.score.problem.entity.ProblemEntity;
+import kmu.itsp.score.project.ProjectService;
+import kmu.itsp.score.project.entity.ProjectEntity;
 import kmu.itsp.score.user.ScoreUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +20,32 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ProblemController {
 	@Autowired
-	ProblemService service;
+	private ProblemService service;
+
+	@Autowired
+	private ProjectService projectService;
+
+	@Secured(value = { "ROLE_ADMIN" })
+	@RequestMapping(value = "/admin/upload/problem", method = RequestMethod.GET)
+	public String viewAdminProbUpload(Model model) {
+
+		List<ProjectEntity> projects = projectService.getProjectList();
+
+		model.addAttribute("projects", projects);
+
+		return "problem/ProblemUpload";
+	}
 
 	@RequestMapping(value = "/add/problem", method = RequestMethod.POST)
-	public String uploadProblemAnswer(ProblemInfoBean problemInfo, Integer compilerIdx) {
+	public String uploadProblemAnswer(ProblemInfoBean problemInfo,
+			Integer compilerIdx) {
 
 		String[] inputValues = problemInfo.getInputValue();
 		System.out.println(problemInfo.getProjectIdx());
 		System.out.println(problemInfo.getProblemName());
 		// System.out.println(probInfo.getSourceFile().getSize());
 
-		if (service.registProblem(problemInfo,compilerIdx)) {
+		if (service.registProblem(problemInfo, compilerIdx)) {
 			// go to read problem page
 			return "redirect:/read/problems";
 		}
@@ -49,9 +66,9 @@ public class ProblemController {
 		if (principal instanceof ScoreUser) {
 			userDetail = (ScoreUser) principal;
 		}
-		
-		List<ProblemEntity> problemList = service.getProblemList(userDetail.getProjectIdx(),
-				pageIdx, listSize);
+
+		List<ProblemEntity> problemList = service.getProblemList(
+				userDetail.getProjectIdx(), pageIdx, listSize);
 		model.addAttribute("problemList", problemList);
 		for (ProblemEntity problem : problemList) {
 			System.out.println(problem.getProblemName());
@@ -59,12 +76,12 @@ public class ProblemController {
 
 		return "forward:/read/scoring/all";
 	}
-	
-	@Secured(value={"ROLE_ADMIN"})
+
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/ajax/remove/problem", method = RequestMethod.DELETE)
 	public @ResponseBody String removeProblem(Integer problemIdx) {
 
-		if(!service.removeProblem(problemIdx)){
+		if (!service.removeProblem(problemIdx)) {
 			return "error";
 		}
 

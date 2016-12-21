@@ -122,6 +122,14 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Override
 	@Transactional
+	public List<ProblemEntity> getProblemList(int projectIdx) {
+		// TODO Auto-generated method stub
+		List<ProblemEntity> problemList = dao.findProblemList(projectIdx);
+		return problemList;
+	}
+	
+	@Override
+	@Transactional
 	public List<ProblemEntity> getProblemList(int projectIdx, int pageIdx,
 			int entitySize) {
 		// TODO Auto-generated method stub
@@ -155,5 +163,7 @@ public class ProblemServiceImpl implements ProblemService {
 		}
 		return true;
 	}
+
+	
 
 }
