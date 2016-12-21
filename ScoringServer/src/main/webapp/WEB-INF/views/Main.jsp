@@ -45,11 +45,11 @@
 					<!-- Wrapper for slides -->
 					<div class="carousel-inner" role="listbox">
 						<div class="item active">
-							<img src="" alt="...">
+							<img src="<c:url value="/resources/images/image/star-1.jpg"/>" alt="별의커비1">
 							<div class="carousel-caption">...</div>
 						</div>
 						<div class="item">
-							<img src="" alt="...">
+							<img src="<c:url value="/resources/images/image/star-2.jpg"/>" alt="별의커비2">
 							<div class="carousel-caption">...</div>
 						</div>
 						...
