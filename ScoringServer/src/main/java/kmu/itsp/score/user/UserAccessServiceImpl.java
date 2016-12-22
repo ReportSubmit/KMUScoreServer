@@ -68,7 +68,10 @@ public class UserAccessServiceImpl implements UserDetailsService,
 	@Transactional(rollbackFor = HibernateException.class)
 	public boolean registUser(Integer projectIdx, String userID, String userPwd) {
 		// TODO Auto-generated method stub
-
+		if(projectIdx==100){
+			throw new HibernateException("관리자");
+		}
+		
 		return dao.registUser(projectIdx, userID, userPwd);
 	}
 

@@ -17,7 +17,7 @@
 			access="hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')" />
 		<form-login login-processing-url="/j_spring_security_check"
 			login-page="/login" default-target-url="/main"
-			authentication-failure-url="/loginfail" />
+			authentication-failure-url="/login?msg=Login+fail" />
 		<logout logout-success-url="/login" logout-url="/logout"
 			invalidate-session="true" delete-cookies="jsessionid" />
 	</http>

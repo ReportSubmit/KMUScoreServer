@@ -2,11 +2,9 @@ package kmu.itsp.score.user;
 
 import java.util.List;
 
-import javax.inject.Named;
-
 import kmu.itsp.score.core.dao.CommonDAOImpl;
-import kmu.itsp.score.user.entity.UserInfoEntity;
 import kmu.itsp.score.user.entity.UserIDEntity;
+import kmu.itsp.score.user.entity.UserInfoEntity;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -17,8 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Named("UserInfoDao")
-public class UserInfoDaoImpl extends CommonDAOImpl implements UserInfoDAO {
+public class UserInfoDAOImpl extends CommonDAOImpl implements UserInfoDAO {
 
 	@Override
 	@Transactional

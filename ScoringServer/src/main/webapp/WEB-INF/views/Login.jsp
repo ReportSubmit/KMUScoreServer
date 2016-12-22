@@ -56,7 +56,7 @@
 			</div>
 		</div>
 		<c:if test="${param.msg ne null}">
-			${param.msg}
+			<h3><span class="label label-info">${param.msg}</span></h3>
 		</c:if>
 	</div>
 
@@ -75,11 +75,14 @@
 									placeholder="아이디">
 							</div>
 							<div class="form-group">
-								<input type="radio" checked="checked" name="projectIdx" value="1">전산학
-								<input type="radio" name="projectIdx" value="2">프로그래밍
+								<input class="form-control" type="password" name="userPwd" placeholder="비밀번호">
 							</div>
 							<div class="form-group">
-								<input class="form-control" type="password" name="userPwd" placeholder="비밀번호">
+								<select class="form-control" name="projectIdx">
+									<c:forEach items="${projects}" var="project">
+										<option value="${project.projectIdx}">${project.projectName}</option>
+									</c:forEach>
+								</select>
 							</div>
 							<div class="form-group">
 								<input class="form-control" type="submit" value="등록"> <br/> <input class="form-control" type="reset"
