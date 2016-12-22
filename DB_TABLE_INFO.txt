@@ -20,7 +20,8 @@ CREATE TABLE `tb_result` (
   PRIMARY KEY (`user_idx`,`problem_idx`,`no`),
   KEY `problem_result` (`problem_idx`),
   KEY `answer_result` (`no`),
-  CONSTRAINT `problem_result` FOREIGN KEY (`problem_idx`) REFERENCES `tb_problem` (`problem_idx`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `problem_result` FOREIGN KEY (`problem_idx`) REFERENCES `tb_problem` (`problem_idx`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_result` FOREIGN KEY (`user_idx`) REFERENCES `tb_user` (`user_idx`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `tb_project` (
