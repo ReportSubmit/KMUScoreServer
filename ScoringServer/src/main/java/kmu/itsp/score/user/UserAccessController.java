@@ -25,8 +25,13 @@ public class UserAccessController {
 	@RequestMapping(value = "/login", method={RequestMethod.POST,RequestMethod.GET})
 	public String login(Model model){
 		List<ProjectEntity> projects = projectService.getProjectList();
-		if(projects.size()>0)
-			projects.remove(projects.size()-1);
+		for(ProjectEntity project:projects){
+			if(project.getProjectIdx()==100){
+				projects.remove(project);
+				break;
+			}
+		}
+			
 		model.addAttribute("projects", projects);
 		
 		return "Login";

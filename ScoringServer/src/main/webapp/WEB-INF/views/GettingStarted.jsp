@@ -108,17 +108,21 @@
 	</div>
 
 	<div class="container">
-		<div class="bs-callout bs-callout-info">
-			<h4>문제 내용 확인</h4>
+		<div class="col-md-9">
+			<div class="bs-callout bs-callout-info">
+				<h4>문제 내용 확인</h4>
 
-			<img src="<c:url value="/resources/images/image/problem-1.PNG"/>"
-				class="img-thumbnail" alt="메인화면">
+				<img src="<c:url value="/resources/images/image/problem-1.PNG"/>"
+					class="img-thumbnail" alt="메인화면">
+			</div>
 		</div>
-		<div class="bs-callout bs-callout-warning">
-			<h4>문제 제출 방법</h4>
+		<div class="col-md-9">
+			<div class="bs-callout bs-callout-warning">
+				<h4>문제 제출 방법</h4>
 
-			<img src="<c:url value="/resources/images/image/problem-2.PNG"/>"
-				class="img-thumbnail" alt="메인화면">
+				<img src="<c:url value="/resources/images/image/problem-2.PNG"/>"
+					class="img-thumbnail" alt="메인화면">
+			</div>
 		</div>
 	</div>
 </body>
