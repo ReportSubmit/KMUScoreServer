@@ -40,11 +40,6 @@ public class ProblemController {
 	public String uploadProblemAnswer(ProblemInfoBean problemInfo,
 			Integer compilerIdx) {
 
-		String[] inputValues = problemInfo.getInputValue();
-		System.out.println(problemInfo.getProjectIdx());
-		System.out.println(problemInfo.getProblemName());
-		// System.out.println(probInfo.getSourceFile().getSize());
-
 		if (problemService.registProblem(problemInfo, compilerIdx)) {
 			// go to read problem page
 			return "redirect:/read/problems";
@@ -76,14 +71,10 @@ public class ProblemController {
 		if(totalProblemNumber%listSize == 0){
 			totalPage -=1;
 		}
-		System.out.println(totalPage);
 		
 		model.addAttribute("problemList", problemList);
 		model.addAttribute("totalPage", totalPage);
 		model.addAttribute("pageIdx", pageIdx);
-		for (ProblemEntity problem : problemList) {
-			System.out.println(problem.getProblemName());
-		}
 
 		return "forward:/read/scoring/all";
 	}

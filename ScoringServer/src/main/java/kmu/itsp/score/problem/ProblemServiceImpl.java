@@ -8,14 +8,12 @@ import java.util.StringTokenizer;
 import kmu.itsp.score.core.process.CompileResultBean;
 import kmu.itsp.score.core.process.IProcessService;
 import kmu.itsp.score.core.process.ProcessServiceFactory;
-import kmu.itsp.score.core.util.FileManager;
 import kmu.itsp.score.problem.entity.AnswerEntity;
 import kmu.itsp.score.problem.entity.ProblemEntity;
 import kmu.itsp.score.problem.entity.ProblemInputEntity;
 
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,19 +24,17 @@ public class ProblemServiceImpl implements ProblemService {
 	@Autowired
 	ProcessServiceFactory processFactory;
 
-	private @Value("${path.temp_dir_path}") String tempDirPath;
-
 	@Override
-	@Transactional(rollbackFor = HibernateException.class)
+	@Transactional(rollbackFor = Exception.class)
 	public boolean registProblem(ProblemInfoBean problemInfo, int compilerIdx) {
 		// TODO Auto-generated method stub
 
 		int nextProblemIdx = dao.getLastProblemIdx() + 1;
 
-		dao.addProblemEntity(problemInfo.getProjectIdx(),nextProblemIdx,
+		dao.addProblemEntity(problemInfo.getProjectIdx(), nextProblemIdx,
 				problemInfo.getProblemName(), problemInfo.getProblemContents());
 
-		System.out.println(nextProblemIdx);
+//		System.out.println(nextProblemIdx);
 
 		problemInfo.setProblemIdx(nextProblemIdx);
 		// insert problem
@@ -47,35 +43,51 @@ public class ProblemServiceImpl implements ProblemService {
 		// insert input
 
 		// complie & excute source file
-		File file = FileManager.createStringToFile(tempDirPath, "", "");
-
-		System.out.println(file.getAbsolutePath());
+		File file = null;
 
 		try {
+			file = File.createTempFile("gcc_", ".c");
 			problemInfo.getSourceFile().transferTo(file);
+//			System.out.println(file.getCanonicalPath());
 		} catch (IllegalStateException | IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-			return false;
+			if (file != null && file.exists()) {
+				file.delete();
+			}
+			throw new HibernateException("종료");
 		}
 
+		IProcessService processService = processFactory
+				.getInstance(compilerIdx);
+
+		// compile
+		CompileResultBean compileResult = null;
 		try {
-			IProcessService processService = processFactory
-					.getInstance(compilerIdx);
+			compileResult = processService.complie(file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			throw new HibernateException("종료");
+		} finally {
+			if (file != null && file.exists()) {
+				file.delete();
+			}
+		}
 
-			CompileResultBean compileResult = processService.complie(file);
-
+		// excute
+		try {
 			if (compileResult.getStatus() == IProcessService.COMPILE_SUCCESS) {
 				String inputs[] = problemInfo.getInputValue();
-				if(inputs == null){
+				if (inputs == null) {
 					inputs = new String[1];
 					inputs[0] = "";
 				}
 				for (int i = 0; i < inputs.length; i++) {
+	
 					int status = processService.runExcuteFile(inputs[i],
-							compileResult.getFileName(),
-							processService.getExcuteDirPath());
-					System.out.println("status:" + status);
+							compileResult.getExcuteFile().getCanonicalPath());
+
+//					System.out.println("status:" + status);
 
 					if (status == IProcessService.EXEC_SUCCESS) {
 
@@ -84,17 +96,15 @@ public class ProblemServiceImpl implements ProblemService {
 						String successResult = processService
 								.getSuccessResult();
 
-						successResult = successResult.replaceAll("(),\t\r\n",
-								"\n");
 						successResult = successResult.replaceAll(" ", "\n");
-						System.out.println(successResult);
+//						System.out.println(successResult);
 						// answer and result compare
 						StringTokenizer tokenizer = new StringTokenizer(
-								successResult, "\n");
+								successResult, "(),\t\r\n");
 
 						int tokenSize = tokenizer.countTokens();
 
-						System.out.println("TokenSize :" + tokenSize);
+//						System.out.println("TokenSize :" + tokenSize);
 
 						// insert answer
 						answerEntity.setAnswerLineNum(tokenSize);
@@ -103,18 +113,22 @@ public class ProblemServiceImpl implements ProblemService {
 						dao.addAnswer(nextProblemIdx, answerEntity);
 
 					} else {
+						// excute error
 						return false;
 					}
 				}
-
 			} else {
+				// compile error
 				return false;
 			}
-
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
+			throw new HibernateException("종료");
+		} finally {
+			if (compileResult.getExcuteFile() != null
+					&& compileResult.getExcuteFile().exists()) {
+				compileResult.getExcuteFile().delete();
+			}
 		}
 
 		return true;
@@ -127,7 +141,7 @@ public class ProblemServiceImpl implements ProblemService {
 		List<ProblemEntity> problemList = dao.findProblemList(projectIdx);
 		return problemList;
 	}
-	
+
 	@Override
 	@Transactional
 	public List<ProblemEntity> getProblemList(int projectIdx, int pageIdx,
@@ -158,7 +172,7 @@ public class ProblemServiceImpl implements ProblemService {
 	@Transactional(rollbackFor = HibernateException.class)
 	public boolean removeProblem(int problemIdx) {
 		// TODO Auto-generated method stub
-		if(!dao.deleteProblem(problemIdx)){
+		if (!dao.deleteProblem(problemIdx)) {
 			return false;
 		}
 		return true;
@@ -168,10 +182,8 @@ public class ProblemServiceImpl implements ProblemService {
 	@Transactional
 	public int getNumberOfProblems(int projectIdx) {
 		// TODO Auto-generated method stub
-		
+
 		return dao.getNumberOfProblems(projectIdx);
 	}
-
-	
 
 }

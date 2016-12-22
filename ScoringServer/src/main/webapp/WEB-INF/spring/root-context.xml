@@ -21,7 +21,7 @@
 	</beans:bean>
 
 	<context:property-placeholder
-		location="classpath:META-INF/spring/path.properties,classpath:META-INF/spring/jdbc.properties, classpath:META-INF/spring/hibernate.properties" />
+		location="classpath:META-INF/spring/jdbc.properties, classpath:META-INF/spring/hibernate.properties" />
 
 
 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">

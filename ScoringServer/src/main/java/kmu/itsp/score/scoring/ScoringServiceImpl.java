@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.UUID;
 
 import kmu.itsp.score.core.process.CompileResultBean;
 import kmu.itsp.score.core.process.IProcessService;
@@ -20,7 +19,6 @@ import kmu.itsp.score.user.UserInfoDAO;
 
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,26 +47,45 @@ public class ScoringServiceImpl implements ScoringService {
 		this.currentProgress = currentProgress;
 	}
 
-	private @Value("${path.temp_dir_path}") String tempDirPath;
-
 	@Override
 	@Transactional
 	public List<ScoringResultBean> scoringSourceFile(
 			ScoringRequestInfoBean requestInfo) {
 		// TODO Auto-generated method stub
 
-		IProcessService processService = processfactory.getInstance(requestInfo.getCompilerIdx());
+		IProcessService processService = processfactory.getInstance(requestInfo
+				.getCompilerIdx());
 
 		File file = null;
 		List<ScoringResultBean> scoringResultBeanList = new ArrayList<ScoringResultBean>();
 
 		try {
-
-			file = File.createTempFile(UUID.randomUUID().toString(), null);
+			file = File.createTempFile("gcc_", ".c");
 			requestInfo.getSourceFile().transferTo(file);
-			System.out.println(file.getAbsolutePath());
-			CompileResultBean compileResult = processService.complie(file);
-			
+//			System.out.println(file.getCanonicalPath());
+		} catch (IllegalStateException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			if (file != null && file.exists()) {
+				file.delete();
+			}
+			return null;
+		}
+
+		CompileResultBean compileResult = null;
+		try {
+			compileResult = processService.complie(file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (file != null && file.exists()) {
+				file.delete();
+			}
+		}
+
+		try {
 			if (compileResult.getStatus() == IProcessService.COMPILE_SUCCESS) {
 
 				List<ProblemInputEntity> inputList = problemDao
@@ -83,10 +100,9 @@ public class ScoringServiceImpl implements ScoringService {
 						input = inputList.get(i).getInput();
 					}
 
-					status = processService.runExcuteFile(input,
-							compileResult.getFileName(),
-							processService.getExcuteDirPath());
-					
+					status = processService.runExcuteFile(input, compileResult
+							.getExcuteFile().getCanonicalPath());
+
 					ScoringResultBean scoringResultBean = new ScoringResultBean();
 					scoringResultBean.setNo(i + 1);
 					scoringResultBean.setInput(input);
@@ -130,15 +146,15 @@ public class ScoringServiceImpl implements ScoringService {
 				}
 
 			}
-
 		} catch (IllegalStateException | IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			setCurrentProgress(0);
 			return null;
 		} finally {
-			if (file != null && file.exists()) {
-				file.delete();
+			if (compileResult.getExcuteFile() != null
+					&& compileResult.getExcuteFile().exists()) {
+				compileResult.getExcuteFile().delete();
 			}
 		}
 
@@ -147,11 +163,12 @@ public class ScoringServiceImpl implements ScoringService {
 
 	public List<String> splitMsgToList(String msg) {
 
-		StringTokenizer tokenizer = new StringTokenizer(msg, "(), \t\r\n");
+		msg=msg.replaceAll(" ", "\n");
+		StringTokenizer tokenizer = new StringTokenizer(msg, "(),\t\r\n");
 
 		int tokenSize = tokenizer.countTokens();
 
-		// System.out.println("TokenSize :"+ tokenSize);
+//		System.out.println("TokenSize :"+ tokenSize);
 		List<String> stringList = new ArrayList<String>();
 		for (int j = 0; j < tokenSize; j++) {
 			String token = tokenizer.nextToken();
@@ -159,7 +176,7 @@ public class ScoringServiceImpl implements ScoringService {
 			if (ScoreUtil.isStringDouble(token.trim())) {
 				token = ScoreUtil.cutDigitInDouble(token.trim());
 			}
-
+//			System.out.println(token);
 			stringList.add(token);
 		}
 
@@ -197,10 +214,10 @@ public class ScoringServiceImpl implements ScoringService {
 				count++;
 			}
 		}
-		int totalScore = -1;
+		int totalScore = 0;
 		if (scoringResults.size() > 0) {
 			totalScore = count * 100 / scoringResults.size();
-			System.out.println(totalScore);
+//			System.out.println(totalScore);
 		}
 		scoringDao.addTotalScore(userIdx, requestInfo.getProblemIdx(),
 				totalScore);
@@ -216,7 +233,8 @@ public class ScoringServiceImpl implements ScoringService {
 		// TODO Auto-generated method stub
 		ScoringReadResponseBean scoreReadBean = new ScoringReadResponseBean();
 		scoreReadBean.setProblemIdx(problemIdx);
-		scoreReadBean.setInfos(scoringDao.findScoringResult(userIdx, problemIdx));
+		scoreReadBean.setInfos(scoringDao
+				.findScoringResult(userIdx, problemIdx));
 
 		return scoreReadBean;
 	}
@@ -225,14 +243,16 @@ public class ScoringServiceImpl implements ScoringService {
 	@Transactional
 	public List<ScoringReadResponseBean> readResults(int projectIdx, int userIdx) {
 		// TODO Auto-generated method stub
-		List<ProblemEntity> problems = problemDao.findAllProblemListByProject(projectIdx);
+		List<ProblemEntity> problems = problemDao
+				.findAllProblemListByProject(projectIdx);
 		List<ScoringReadResponseBean> scoreReadBeanList = new ArrayList<ScoringReadResponseBean>();
 
 		for (int i = 0; i < problems.size(); i++) {
 
-			List<ScoringTotalEntity> entitys = scoringDao.findScoringTotalResult(
-					userIdx, problems.get(i).getProblemIdx());
-			if(entitys != null && !entitys.isEmpty()){
+			List<ScoringTotalEntity> entitys = scoringDao
+					.findScoringTotalResult(userIdx, problems.get(i)
+							.getProblemIdx());
+			if (entitys != null && !entitys.isEmpty()) {
 				ScoringReadResponseBean scoreReadBean = new ScoringReadResponseBean();
 				scoreReadBean.setProblemIdx(problems.get(i).getProblemIdx());
 				scoreReadBean.setInfos(entitys);
