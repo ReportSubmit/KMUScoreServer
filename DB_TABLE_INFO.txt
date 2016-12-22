@@ -25,7 +25,7 @@ CREATE TABLE `tb_result` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `tb_project` (
-  `project_idx` int(11) unsigned NOT NULL,
+  `project_idx` int(11) unsigned NOT NULL COMMENT '100==admin',
   `project_name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`project_idx`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
