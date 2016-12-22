@@ -96,9 +96,6 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 			int entitySize) {
 		// TODO Auto-generated method stub
 
-		System.out.println(projectIdx + ":" + pageIdx + ":" + entitySize + ":"
-				+ (pageIdx-1) * (entitySize) + ":" + pageIdx * (entitySize));
-
 		Criteria criteria = getSession().createCriteria(ProblemEntity.class);
 
 		// compare id
@@ -172,9 +169,9 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 
 		List<AnswerEntity> answerList = (List<AnswerEntity>) criteria.list();
 
-		for (int i = 0; i < answerList.size(); i++) {
-			System.out.println(answerList.get(i).getAnswer());
-		}
+//		for (int i = 0; i < answerList.size(); i++) {
+//			System.out.println(answerList.get(i).getAnswer());
+//		}
 
 		return answerList;
 	}
@@ -190,9 +187,9 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 		List<ProblemInputEntity> inputList = (List<ProblemInputEntity>) criteria
 				.list();
 
-		for (int i = 0; i < inputList.size(); i++) {
-			System.out.println(inputList.get(i).getInput());
-		}
+//		for (int i = 0; i < inputList.size(); i++) {
+//			System.out.println(inputList.get(i).getInput());
+//		}
 		return inputList;
 	}
 

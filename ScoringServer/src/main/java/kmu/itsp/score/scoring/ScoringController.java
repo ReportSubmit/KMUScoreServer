@@ -84,7 +84,6 @@ public class ScoringController {
 		if (principal instanceof ScoreUser) {
 			userDetail = (ScoreUser) principal;
 		}
-		System.out.println("in scoringRead");
 
 		List<ScoringReadResponseBean> scoreReadBeanList = service
 				.readResults(userDetail.getProjectIdx(),userDetail.getUserIdx());

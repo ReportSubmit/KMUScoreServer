@@ -18,8 +18,6 @@ public class ScoringDAOImpl extends CommonDAOImpl implements ScoringDAO {
 	public boolean addScoringResults(int userIdx, int problemIdx,
 			List<ScoringResultBean> scoringResults) {
 		// TODO Auto-generated method stub
-
-		System.out.println(problemIdx);
 		
 		for (int i = 0; i < scoringResults.size(); i++) {
 			ScoringResultEntity entity = new ScoringResultEntity();
@@ -61,9 +59,9 @@ public class ScoringDAOImpl extends CommonDAOImpl implements ScoringDAO {
 		List<ScoringTotalEntity> totalEntitys = (List<ScoringTotalEntity>) criteria
 				.list();
 
-		for (int i = 0; i < totalEntitys.size(); i++) {
-			System.out.println(totalEntitys.get(i).getScoreNo());
-		}
+//		for (int i = 0; i < totalEntitys.size(); i++) {
+//			System.out.println(totalEntitys.get(i).getScoreNo());
+//		}
 
 		return totalEntitys;
 	}
@@ -86,12 +84,12 @@ public class ScoringDAOImpl extends CommonDAOImpl implements ScoringDAO {
 			return null;
 		}
 		
-		for (int i = 0; i < scoringList.size(); i++) {
-			System.out.println(problemIdx);
-			System.out.println(scoringList.get(i).getScoreNo());
-			System.out.println(scoringList.get(i).getScore());
-			
-		}
+//		for (int i = 0; i < scoringList.size(); i++) {
+//			System.out.println(problemIdx);
+//			System.out.println(scoringList.get(i).getScoreNo());
+//			System.out.println(scoringList.get(i).getScore());
+//			
+//		}
 		
 		return scoringList;
 	}

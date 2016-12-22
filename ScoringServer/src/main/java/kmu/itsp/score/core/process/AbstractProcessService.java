@@ -67,53 +67,46 @@ public abstract class AbstractProcessService implements IProcessService {
 		return commands;
 	}
 
-	@Override
-	public int excuteCommand(List<String> command, int limitTime) {
-		// TODO Auto-generated method stub
-		ProcessBuilder pb = new ProcessBuilder(command);
-
-		return runProcess(pb, limitTime);
-
-	}
 
 	@Override
 	public int excuteCommand(List<String> command, String input, int limitTime) {
 		// TODO Auto-generated method stub
 		File file = null;
 		ProcessBuilder pb = new ProcessBuilder(command);
-		try {
-			file = File.createTempFile("temp", UUID.randomUUID()+"");
-			FileWriter writer = new FileWriter(file);
-			System.out.println(input);
-			writer.write(input);
-			writer.flush();
-			pb.redirectInput(file);
-			System.out.println(file.getAbsolutePath());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
+		
+		if (input != null && !(input.trim().equals(""))) {
+			try {
+				file = File.createTempFile("temp", UUID.randomUUID() + "");
+				FileWriter writer = new FileWriter(file);
+				System.out.println(input);
+				writer.write(input);
+				writer.flush();
+				pb.redirectInput(file);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+			} finally {
+				if (file != null && file.exists()) {
+					file.delete();
+				}
+			}
 		}
 		
 		int status = runProcess(pb, limitTime);
-		
-		if(file.exists()){
-			file.delete();
-		}
 		
 		return status;
 
 	}
 
 	@Override
-	public int excuteCommand(List<String> command, File inputFile, int limitTime) {
+	public int excuteCommand(List<String> command, int limitTime, File inputFile) {
 		// TODO Auto-generated method stub
-
-		if (inputFile == null || !inputFile.exists()) {
-			return IProcessService.NOINPUT_ERROR;
+		ProcessBuilder pb = new ProcessBuilder(command);
+		if (inputFile != null && inputFile.exists()) {
+			pb.redirectInput(inputFile);
 		}
-		ProcessBuilder pb = new ProcessBuilder(command)
-				.redirectInput(inputFile);
 
 		return runProcess(pb, limitTime);
 	}
