@@ -32,7 +32,12 @@ public abstract class AbstractProcessService implements IProcessService {
 	@Override
 	public String getError() {
 		// TODO Auto-generated method stub
-		return errorCopy.getResult();
+		try
+		{
+			return errorCopy.getResult();
+		}catch(NullPointerException e){
+			return null;
+		}
 	}
 
 	@Override
@@ -49,7 +54,12 @@ public abstract class AbstractProcessService implements IProcessService {
 	@Override
 	public String getSuccessResult() {
 		// TODO Auto-generated method stub
-		return successCopy.getResult();
+		try
+		{
+			return successCopy.getResult();
+		}catch(NullPointerException e){
+			return null;
+		}
 	}
 
 	public boolean checkStatus(int status) {
