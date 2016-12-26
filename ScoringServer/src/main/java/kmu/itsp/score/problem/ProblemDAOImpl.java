@@ -41,7 +41,7 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 						"SELECT problem_idx FROM tb_problem ORDER BY problem_idx DESC LIMIT 1;");
 		try {
 			return (int) query.uniqueResult();
-		} catch (HibernateException he) {
+		} catch (Exception e) {
 			// TODO: handle exception
 			return 0;
 		}

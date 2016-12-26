@@ -1,5 +1,8 @@
 package kmu.itsp.score.user;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import kmu.itsp.score.project.ProjectService;
@@ -43,15 +46,15 @@ public class UserAccessController {
 	}
 	
 	@RequestMapping(value ="/signup", method=RequestMethod.POST)
-	public String signup(Integer projectIdx,String userID, String userPwd){
+	public String signup(Integer projectIdx,String userID, String userPwd) throws UnsupportedEncodingException{
 		
 		String msg;
 		try {
 			userService.registUser(projectIdx,userID,userPwd);
-			msg = "가입되었습니다.";
+			msg = URLEncoder.encode("가입되었습니다.","UTF-8");
 		} catch (Exception e) {
 			// TODO: handle exception
-			msg = "가입+실패하였습니다.";
+			msg = URLEncoder.encode("가입+실패하였습니다.","UTF-8");
 		}
 		System.out.println(msg);
 		return "redirect:/login?msg="+msg;
