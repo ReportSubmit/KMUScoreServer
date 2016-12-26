@@ -1,29 +1,5 @@
 DB TABLE
 
-CREATE TABLE `tb_user` (
-  `user_idx` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(20) NOT NULL,
-  `user_pwd` varchar(15) NOT NULL,
-  `project_idx` int(11) unsigned NOT NULL,
-  `user_grade` int(1) NOT NULL DEFAULT '2',
-  PRIMARY KEY (`user_idx`),
-  UNIQUE KEY `useridx` (`user_id`),
-  KEY `project_user` (`project_idx`),
-  CONSTRAINT `project_user` FOREIGN KEY (`project_idx`) REFERENCES `tb_project` (`project_idx`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-
-CREATE TABLE `tb_result` (
-  `user_idx` int(11) unsigned NOT NULL,
-  `problem_idx` int(11) unsigned NOT NULL,
-  `no` int(11) NOT NULL,
-  `score` int(3) unsigned NOT NULL,
-  PRIMARY KEY (`user_idx`,`problem_idx`,`no`),
-  KEY `problem_result` (`problem_idx`),
-  KEY `answer_result` (`no`),
-  CONSTRAINT `problem_result` FOREIGN KEY (`problem_idx`) REFERENCES `tb_problem` (`problem_idx`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_result` FOREIGN KEY (`user_idx`) REFERENCES `tb_user` (`user_idx`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE `tb_project` (
   `project_idx` int(11) unsigned NOT NULL COMMENT '100==admin',
   `project_name` varchar(50) DEFAULT NULL,
@@ -39,6 +15,19 @@ CREATE TABLE `tb_problem` (
   KEY `project_problem` (`project_idx`),
   CONSTRAINT `project_problem` FOREIGN KEY (`project_idx`) REFERENCES `tb_project` (`project_idx`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `tb_user` (
+  `user_idx` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(20) NOT NULL,
+  `user_pwd` varchar(15) NOT NULL,
+  `project_idx` int(11) unsigned NOT NULL,
+  `user_grade` int(1) NOT NULL DEFAULT '2',
+  PRIMARY KEY (`user_idx`),
+  UNIQUE KEY `useridx` (`user_id`),
+  KEY `project_user` (`project_idx`),
+  CONSTRAINT `project_user` FOREIGN KEY (`project_idx`) REFERENCES `tb_project` (`project_idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `tb_input` (
   `problem_idx` int(11) unsigned NOT NULL,
@@ -56,4 +45,16 @@ CREATE TABLE `tb_answer` (
   PRIMARY KEY (`no`,`problem_idx`),
   KEY `problemIdx` (`problem_idx`),
   CONSTRAINT `problem_answer` FOREIGN KEY (`problem_idx`) REFERENCES `tb_problem` (`problem_idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tb_result` (
+  `user_idx` int(11) unsigned NOT NULL,
+  `problem_idx` int(11) unsigned NOT NULL,
+  `no` int(11) NOT NULL,
+  `score` int(3) unsigned NOT NULL,
+  PRIMARY KEY (`user_idx`,`problem_idx`,`no`),
+  KEY `problem_result` (`problem_idx`),
+  KEY `answer_result` (`no`),
+  CONSTRAINT `problem_result` FOREIGN KEY (`problem_idx`) REFERENCES `tb_problem` (`problem_idx`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_result` FOREIGN KEY (`user_idx`) REFERENCES `tb_user` (`user_idx`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
