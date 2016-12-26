@@ -22,7 +22,7 @@ CREATE TABLE `tb_user` (
   `user_id` varchar(20) NOT NULL,
   `user_pwd` varchar(15) NOT NULL,
   `project_idx` int(11) unsigned NOT NULL,
-  `user_grade` int(1) NOT NULL DEFAULT '2',
+  `user_grade` int(1) NOT NULL DEFAULT '2' COMMENT '1==admin',
   PRIMARY KEY (`user_idx`),
   UNIQUE KEY `useridx` (`user_id`),
   KEY `project_user` (`project_idx`),
