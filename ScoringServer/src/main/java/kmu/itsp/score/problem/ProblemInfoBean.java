@@ -1,13 +1,35 @@
 package kmu.itsp.score.problem;
 
 import org.springframework.web.multipart.MultipartFile;
-
+/**
+ * 문제에 대한 정보를 담고 있는 bean 클래스
+ * @author WJ
+ *
+ */
 public class ProblemInfoBean {
+	/**
+	 * 과목 번호
+	 */
 	private int projectIdx;
+	/**
+	 * 문제 번호
+	 */
 	private int problemIdx;
+	/**
+	 * 문제 제목
+	 */
 	private String problemName;
+	/**
+	 * 문제 내용
+	 */
 	private String problemContents;
+	/**
+	 * 각 테스트 케이스들
+	 */
 	private String[] inputValue;
+	/**
+	 * 문제 소스코드 파일
+	 */
 	private MultipartFile sourceFile;
 	
 	public String[] getInputValue() {

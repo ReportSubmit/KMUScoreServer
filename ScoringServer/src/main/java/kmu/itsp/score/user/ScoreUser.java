@@ -5,7 +5,11 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-
+/**
+ * 사용자의 과목 번호와 사용자 번호, 유저 역할(UserDetails)를 저장한다.
+ * @author WJ
+ *
+ */
 public class ScoreUser extends User implements UserDetails{
 	private int projectIdx;
 	private int userIdx;

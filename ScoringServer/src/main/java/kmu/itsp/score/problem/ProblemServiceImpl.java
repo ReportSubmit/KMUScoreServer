@@ -17,21 +17,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 문제에 대한 정보를 처리하는 서비스 클래스
+ * @author WJ
+ *
+ */
 @Service
 public class ProblemServiceImpl implements ProblemService {
+	/**
+	 * 문제 정보가 담긴 DB와 access 할 수 있는 객체
+	 */
 	@Autowired
-	ProblemDAO dao;
+	ProblemDAO problemDao;
+	/**
+	 * ProcessService를 얻올 수 있는 factory 객체
+	 */
 	@Autowired
 	ProcessServiceFactory processFactory;
 
+	/**
+	 * 문제 등록 서비스 메소드
+	 * 문제 정보, 각 테스트 입력 값,정답을 저장한다 
+	 * @param problemInfo 등록할 문제 정보가 담긴 bean
+	 * @param compilerIdx 컴파일러 결정할 idx
+	 * @return true or exception
+	 * @exception HibernateException 데이터베이스 문제시 발생
+	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean registProblem(ProblemInfoBean problemInfo, int compilerIdx) {
 		// TODO Auto-generated method stub
 
-		int nextProblemIdx = dao.getLastProblemIdx() + 1;
+		int nextProblemIdx = problemDao.getLastProblemIdx() + 1;
 
-		dao.addProblemEntity(problemInfo.getProjectIdx(), nextProblemIdx,
+		problemDao.addProblemEntity(problemInfo.getProjectIdx(), nextProblemIdx,
 				problemInfo.getProblemName(), problemInfo.getProblemContents());
 
 //		System.out.println(nextProblemIdx);
@@ -39,7 +58,7 @@ public class ProblemServiceImpl implements ProblemService {
 		problemInfo.setProblemIdx(nextProblemIdx);
 		// insert problem
 
-		dao.addInputs(nextProblemIdx, problemInfo.getInputValue());
+		problemDao.addInputs(nextProblemIdx, problemInfo.getInputValue());
 		// insert input
 
 		// complie & excute source file
@@ -64,7 +83,7 @@ public class ProblemServiceImpl implements ProblemService {
 		// compile
 		CompileResultBean compileResult = null;
 		try {
-			compileResult = processService.complie(file);
+			compileResult = processService.compile(file);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			throw new HibernateException("종료");
@@ -84,7 +103,7 @@ public class ProblemServiceImpl implements ProblemService {
 				}
 				for (int i = 0; i < inputs.length; i++) {
 	
-					int status = processService.runExcuteFile(inputs[i],
+					int status = processService.runExecutableFile(inputs[i],
 							compileResult.getExcuteFile().getCanonicalPath());
 
 //					System.out.println("status:" + status);
@@ -110,7 +129,7 @@ public class ProblemServiceImpl implements ProblemService {
 						answerEntity.setAnswerLineNum(tokenSize);
 						answerEntity.setAnswerNo(i + 1);
 						answerEntity.setAnswer(successResult);
-						dao.addAnswer(nextProblemIdx, answerEntity);
+						problemDao.addAnswer(nextProblemIdx, answerEntity);
 
 					} else {
 						// excute error
@@ -134,56 +153,91 @@ public class ProblemServiceImpl implements ProblemService {
 		return true;
 	}
 
+	/**
+	 * 과목 번호에 해당하는 모든 문제들을 반환한다.
+	 * @param projectIdx 과목 번호
+	 * @return List - {@link ProblemEntity}
+	 */
 	@Override
 	@Transactional
 	public List<ProblemEntity> getProblemList(int projectIdx) {
 		// TODO Auto-generated method stub
-		List<ProblemEntity> problemList = dao.findProblemList(projectIdx);
+		List<ProblemEntity> problemList = problemDao.findAllProblemListByProject(projectIdx, false);
 		return problemList;
 	}
 
+	/**
+	 * 과목 번호에 해당하는 문제들을 제한된 수만큼 반환한다.
+	 * @param projectIdx 과목 번호
+	 * @param pageIdx 문제들 중 처음 반환 시작할 idx
+	 * @param entitySize 반환할 개수
+	 * @return List - {@link ProblemEntity}
+	 */
 	@Override
 	@Transactional
 	public List<ProblemEntity> getProblemList(int projectIdx, int pageIdx,
 			int entitySize) {
 		// TODO Auto-generated method stub
-		List<ProblemEntity> problemList = dao.findProblemList(projectIdx,
+		List<ProblemEntity> problemList = problemDao.findProblemList(projectIdx,
 				pageIdx, entitySize);
 		return problemList;
 	}
 
+	/**
+	 * 문제 번호에 해당하는 테스트 입력값을 반환한다.
+	 * @param problemIdx - 문제 번호
+	 * @return List - {@link ProblemInputEntity}
+	 * @exception HibernateException 데이터베이스 문제시 발생
+	 */
 	@Override
 	@Transactional(rollbackFor = HibernateException.class)
 	public List<ProblemInputEntity> getInputList(int problemIdx) {
 		// TODO Auto-generated method stub
-		List<ProblemInputEntity> inputList = dao.findInputList(problemIdx);
+		List<ProblemInputEntity> inputList = problemDao.findInputList(problemIdx);
 		return inputList;
 	}
 
+	/**
+	 * 문제 번호에 해당하는 정답을 반환한다.
+	 * @param problemIdx - 문제 번호
+	 * @return List - {@link AnswerEntity}
+	 * 
+	 */
 	@Override
 	@Transactional(rollbackFor = HibernateException.class)
 	public List<AnswerEntity> getAnswerList(int problemIdx) {
 		// TODO Auto-generated method stub
-		List<AnswerEntity> answerList = dao.findAnswerList(problemIdx);
+		List<AnswerEntity> answerList = problemDao.findAnswerList(problemIdx);
 		return answerList;
 	}
 
+	/**
+	 * 문제 번호에 해당하는 문제를 제거한다.
+	 * @param problemIdx - 문제 번호
+	 * @return true or false
+	 * 
+	 */
 	@Override
 	@Transactional(rollbackFor = HibernateException.class)
 	public boolean removeProblem(int problemIdx) {
 		// TODO Auto-generated method stub
-		if (!dao.deleteProblem(problemIdx)) {
+		if (!problemDao.deleteProblem(problemIdx)) {
 			return false;
 		}
 		return true;
 	}
-
+	/**
+	 * 과목 번호에 해당하는 모든 문제의 수를 반환한다.
+	 * @param projectIdx 과목 번호
+	 * @return int
+	 * 
+	 */
 	@Override
 	@Transactional
 	public int getNumberOfProblems(int projectIdx) {
 		// TODO Auto-generated method stub
 
-		return dao.getNumberOfProblems(projectIdx);
+		return problemDao.getNumberOfProblems(projectIdx);
 	}
 
 }

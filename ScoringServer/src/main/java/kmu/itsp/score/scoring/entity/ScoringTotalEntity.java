@@ -9,6 +9,12 @@ import javax.persistence.SecondaryTable;
 import javax.persistence.SecondaryTables;
 import javax.persistence.Table;
 
+/**
+ * ScoringTotalEntity
+ * DB table tb_result에 tb_answer,tb_input과 조인한 Entity
+ * @author WJ
+ *
+ */
 @Entity
 @Table(name="tb_result")
 @SecondaryTables(value = {

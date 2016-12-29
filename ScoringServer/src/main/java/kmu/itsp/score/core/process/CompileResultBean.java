@@ -3,6 +3,11 @@ package kmu.itsp.score.core.process;
 import java.io.File;
 
 
+/**
+ * Compile 시 결과값을 저장하는 클래스
+ * @author WJ
+ *
+ */
 public class CompileResultBean {
 	private int status;
 	private File excuteFile;
@@ -46,6 +51,10 @@ public class CompileResultBean {
 		this.successMsg = successMsg;
 	}
 	
+	/**
+	 * 실행 프로그램을 GC가 실행될 때 컴퓨터 내부에서 제거
+	 * 
+	 */
 	@Override
 	protected void finalize() throws Throwable {
 		// TODO Auto-generated method stub

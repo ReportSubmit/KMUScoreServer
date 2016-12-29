@@ -9,15 +9,26 @@ import kmu.itsp.score.problem.entity.ProblemEntity;
 import kmu.itsp.score.problem.entity.ProblemInputEntity;
 
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-
+/**
+ * 문제에 대한 정보가 담긴 DB에 access하는 Repository 클래스
+ * @author WJ
+ *
+ */
 @Repository
 public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 
+	/**
+	 * 새로운 문제를 저장하는 메소드
+	 * @param projectIdx 과목 번호
+	 * @param problemIdx 문제 번호
+	 * @param problemName 문제 제목
+	 * @param problemContents 문제 내용
+	 * @return true or exception
+	 */
 	@Override
 	public boolean addProblemEntity(int projectIdx,int problemIdx, String problemName,
 			String problemContents) {
@@ -34,6 +45,10 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 
 	}
 
+	/**
+	 * 현재 저장된 문제들 중 마지막 번호를 DB로부터 얻어온다
+	 * @return int 마지막번호 or 값이 없을시 0
+	 */
 	@Override
 	public int getLastProblemIdx() {
 		SQLQuery query = getSession()
@@ -47,6 +62,12 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 		}
 	}
 
+	/**
+	 * 새로운 문제에 대한 여러개의 테스트 입력 값을 저장한다.
+	 * @param problemIdx 문제번호
+	 * @param inputValues 테스트에 대한 여러 입력 값들
+	 * @return true or exception
+	 */
 	@Override
 	public boolean addInputs(int problemIdx, String[] inputValues) {
 		if (inputValues != null) {
@@ -61,6 +82,12 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 		return true;
 	}
 
+	/**
+	 * 해당 문제의 여러개의 테스트 입력 값에 대한 정답을 저장한다.
+	 * @param problemIdx 문제번호
+	 * @param entity 문제에 대한 정답 정보를 담고 있다
+	 * @return true or exception
+	 */
 	@Override
 	public boolean addAnswer(int problemIdx, AnswerEntity entity) {
 		// TODO Auto-generated method stub
@@ -73,6 +100,11 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 		return true;
 	}
 
+	/**
+	 * 해당 문제 번호에 대한 정보를 찾아온다
+	 * @param problemIdx 문제 번호
+	 * @return {@link ProblemEntity}
+	 */
 	@Override
 	public ProblemEntity findProblem(int problemIdx){
 		// TODO Auto-generated method stub
@@ -90,9 +122,15 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 			return null;
 		}
 	}
-	
+	/**
+	 * 해당 과목 번호에 대한 문제들을 찾아온다. 내림차순
+	 * @param projectIdx 과목 번호
+	 * @param firstIdx 전체 문제 들 중 최초 가져올 문제의 시작 index
+	 * @param entitySize 가져올 문제 개수
+	 * @return List - {@link ProblemEntity}
+	 */
 	@Override
-	public List<ProblemEntity> findProblemList(int projectIdx, int pageIdx,
+	public List<ProblemEntity> findProblemList(int projectIdx, int firstIdx,
 			int entitySize) {
 		// TODO Auto-generated method stub
 
@@ -105,14 +143,20 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 		criteria.addOrder(Order.desc("problemIdx"));
 
 		// limit
-		criteria.setFirstResult((pageIdx - 1) * entitySize);
-		criteria.setMaxResults(pageIdx * (entitySize));
+		criteria.setFirstResult((firstIdx - 1) * entitySize);
+		criteria.setMaxResults(firstIdx * (entitySize));
 
 		return criteria.list();
 	}
 
+	/**
+	 * 해당 과목 번호에 대한 문제들을 찾아온다.
+	 * @param projectIdx 과목 번호
+	 * @param reverse - true: problemIdx desc , false: problemIdx asc 
+	 * @return List - {@link ProblemEntity}
+	 */
 	@Override
-	public List<ProblemEntity> findProblemList(int projectIdx) {
+	public List<ProblemEntity> findAllProblemListByProject(int projectIdx, boolean reverse) {
 		// TODO Auto-generated method stub
 
 		Criteria criteria = getSession().createCriteria(ProblemEntity.class);
@@ -121,27 +165,19 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 		if(projectIdx != 100){
 			criteria.add(Restrictions.eq("projectIdx", projectIdx));
 		}
-		criteria.addOrder(Order.asc("problemIdx"));
-
-		return criteria.list();
-
-	}
-	
-	@Override
-	public List<ProblemEntity> findAllProblemListByProject(int projectIdx) {
-		// TODO Auto-generated method stub
-
-		Criteria criteria = getSession().createCriteria(ProblemEntity.class);
-
-		// compare id
-		if(projectIdx != 100){
-			criteria.add(Restrictions.eq("projectIdx", projectIdx));
+		if(reverse){
+			criteria.addOrder(Order.desc("problemIdx"));
+		}else{
+			criteria.addOrder(Order.asc("problemIdx"));
 		}
-		criteria.addOrder(Order.desc("problemIdx"));
-
 		return criteria.list();
 	}
 
+	/**
+	 * 문제 번호에 해당하는 문제를 찾아 지운다.
+	 * @param problemIdx 문제 번호 
+	 * @return true or false
+	 */
 	@Override
 	public boolean deleteProblem(int problemIdx) {
 		// TODO Auto-generated method stub
@@ -154,12 +190,20 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 		return true;
 	}
 
+	/**
+	 * 미구현
+	 */
 	@Override
 	public boolean deleteAllProblemInProject(int projectIdx) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * 문제 번호에 해당하는 정답들을 찾아온다.
+	 * @param problemIdx 문제번호
+	 * @return List - {@link AnswerEntity}
+	 */
 	@Override
 	public List<AnswerEntity> findAnswerList(int problemIdx) {
 		// TODO Auto-generated method stub
@@ -176,6 +220,11 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 		return answerList;
 	}
 
+	/**
+	 * 문제 번호에 해당하는 테스트 입력들을 찾아온다.
+	 * @param problemIdx 문제번호
+	 * @return List - {@link ProblemInputEntity}
+	 */
 	@Override
 	public List<ProblemInputEntity> findInputList(int problemIdx) {
 		// TODO Auto-generated method stub
@@ -193,6 +242,11 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 		return inputList;
 	}
 
+	/**
+	 * 현재 과목의 전체 문제 수를 찾아온다.
+	 * @param projectIdx 과목 번호
+	 * @return int
+	 */
 	@Override
 	public int getNumberOfProblems(int projectIdx) {
 		// TODO Auto-generated method stub

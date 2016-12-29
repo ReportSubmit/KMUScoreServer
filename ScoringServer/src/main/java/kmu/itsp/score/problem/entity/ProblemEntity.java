@@ -7,6 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * ProblemEntity
+ * DB table tb_problem의 entity이다.
+ * @author WJ
+ *
+ */
 @Entity
 @Table(name = "tb_problem")
 public class ProblemEntity implements Serializable {

@@ -8,7 +8,11 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
  * web socket or stomp(using sockjs)
  * 
  * */
-
+/**
+ * 미구현
+ * @author WJ
+ *
+ */
 public class ScoringProgressHandler extends TextWebSocketHandler{
 
 	@Override

@@ -16,11 +16,11 @@ public interface IProcessService {
 	String getSuccessResult();
 	int getReturnValue();
 	void setReturnValue(int returnValue);
-	CompileResultBean complie(File complieFile) throws IOException;
-	int excuteCommand(List<String> command, int limitTime, File inputFiile);
-	int excuteCommand(List<String> command, String input, int limitTime);
-	int runComplier(File compileFile, String uuid) throws IOException;
-	int runExcuteFile(File inputFile, String filePath);
-	int runExcuteFile(String input, String filePath);
+	CompileResultBean compile(File compileFile) throws IOException;
+	int executeCommand(List<String> command, int limitTime, File inputFiile);
+	int executeCommand(List<String> command, String input, int limitTime);
+	int runCompiler(File compileFile, String uuid) throws IOException;
+	int runExecutableFile(File inputFile, String filePath);
+	int runExecutableFile(String input, String filePath);
 	
 }

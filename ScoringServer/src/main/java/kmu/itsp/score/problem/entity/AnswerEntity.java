@@ -6,7 +6,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
+/**
+ * AnswerEntity
+ * DB table tb_answer의 entity이다.
+ * @author WJ
+ *
+ */
 @Entity
 @Table(name = "tb_answer")
 public class AnswerEntity implements Serializable {

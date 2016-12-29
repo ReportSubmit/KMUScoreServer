@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 import kmu.itsp.score.core.process.CompileResultBean;
 import kmu.itsp.score.core.process.IProcessService;
 import kmu.itsp.score.core.process.ProcessServiceFactory;
-import kmu.itsp.score.core.util.ScoreUtil;
+import kmu.itsp.score.core.util.NumberConvertUtil;
 import kmu.itsp.score.problem.ProblemDAO;
 import kmu.itsp.score.problem.entity.AnswerEntity;
 import kmu.itsp.score.problem.entity.ProblemEntity;
@@ -22,21 +22,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 채점 서비스 클래스
+ * @author WJ
+ *
+ */
 @Service(value = "ScoringService")
 public class ScoringServiceImpl implements ScoringService {
 
+	/**
+	 * 문제 정보가 담긴 DB와 access 할 수 있는 객체
+	 */
 	@Autowired
 	ProblemDAO problemDao;
 
+	/**
+	 * 사용자 정보가 담긴 DB와 access 할 수 있는 객체
+	 */
 	@Autowired
 	UserInfoDAO userDao;
 
+	/**
+	 * 채점 정보가 담긴 DB와 access 할 수 있는 객체
+	 */
 	@Autowired
 	ScoringDAO scoringDao;
 
+	/**
+	 * ProcessService를 얻올 수 있는 factory 객체
+	 */
 	@Autowired
 	ProcessServiceFactory processfactory;
 
+	/**
+	 * 미구현
+	 */
 	private int currentProgress;
 
 	public int getCurrentProgress() {
@@ -47,6 +67,11 @@ public class ScoringServiceImpl implements ScoringService {
 		this.currentProgress = currentProgress;
 	}
 
+	/**
+	 * 소스코드를 채점하는 메소드
+	 * @param requestInfo 채점에 필요한 정보를 담고 있다 {@link ScoringRequestInfoBean}
+	 * @return {@link List} {@link ScoringResultBean} 각 테스트에 대한 채점결과
+	 */
 	@Override
 	@Transactional
 	public List<ScoringResultBean> scoringSourceFile(
@@ -74,7 +99,7 @@ public class ScoringServiceImpl implements ScoringService {
 
 		CompileResultBean compileResult = null;
 		try {
-			compileResult = processService.complie(file);
+			compileResult = processService.compile(file);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,7 +125,7 @@ public class ScoringServiceImpl implements ScoringService {
 						input = inputList.get(i).getInput();
 					}
 
-					status = processService.runExcuteFile(input, compileResult
+					status = processService.runExecutableFile(input, compileResult
 							.getExcuteFile().getCanonicalPath());
 
 					ScoringResultBean scoringResultBean = new ScoringResultBean();
@@ -161,10 +186,15 @@ public class ScoringServiceImpl implements ScoringService {
 		return scoringResultBeanList;
 	}
 
-	public List<String> splitMsgToList(String msg) {
+	/**
+	 * msg를 (),\t\r\n으로 나눠 list로 반환하는 메소드
+	 * @param str 문자열
+	 * @return {@link List} {@link String}
+	 */
+	public List<String> splitMsgToList(String str) {
 
-		msg=msg.replaceAll(" ", "\n");
-		StringTokenizer tokenizer = new StringTokenizer(msg, "(),\t\r\n");
+		str=str.replaceAll(" ", "\n");
+		StringTokenizer tokenizer = new StringTokenizer(str, "(),\t\r\n");
 
 		int tokenSize = tokenizer.countTokens();
 
@@ -173,8 +203,8 @@ public class ScoringServiceImpl implements ScoringService {
 		for (int j = 0; j < tokenSize; j++) {
 			String token = tokenizer.nextToken();
 			// if String value is number
-			if (ScoreUtil.isStringDouble(token.trim())) {
-				token = ScoreUtil.cutDigitInDouble(token.trim());
+			if (NumberConvertUtil.isStringDouble(token.trim())) {
+				token = NumberConvertUtil.cutDigitInDouble(token.trim());
 			}
 //			System.out.println(token);
 			stringList.add(token);
@@ -184,6 +214,12 @@ public class ScoringServiceImpl implements ScoringService {
 
 	}
 
+	/**
+	 * 소스코드 결과와 정답을 비교하여 점수를 반환
+	 * @param resultList 소스코드 결과
+	 * @param answerList 정답
+	 * @return int - 점수
+	 */
 	public int compareResultToAnswer(List<String> resultList,
 			List<String> answerList) {
 		// answer and result compare
@@ -202,6 +238,13 @@ public class ScoringServiceImpl implements ScoringService {
 		return score;
 	}
 
+	/**
+	 * 채점 결과를 등록 서비스
+	 * @param userIdx 사용자 번호
+	 * @param requestInfo 채점에 필요한 정보
+	 * @param scoringResults 채점 결과
+	 * @return true or exception
+	 */
 	@Override
 	@Transactional(rollbackFor = HibernateException.class)
 	public boolean registResult(int userIdx,
@@ -227,6 +270,12 @@ public class ScoringServiceImpl implements ScoringService {
 		return true;
 	}
 
+	/**
+	 * 사용자 번호와 문제 번호에 해당하는 채점결과를 DB로부터 얻어 반환
+	 * @param userIdx 사용자 번호
+	 * @param problemIdx 문제 번호
+	 * @return {@link ScoringReadResponseBean}
+	 */
 	@Override
 	@Transactional
 	public ScoringReadResponseBean readResult(int userIdx, int problemIdx) {
@@ -239,18 +288,24 @@ public class ScoringServiceImpl implements ScoringService {
 		return scoreReadBean;
 	}
 
+	/**
+	 * 사용자 번호와 과제 번호에 해당하는 각 문제에 해당하는 채점 결과를 DB로부터 얻어 반환
+	 * @param userIdx 사용자 번호
+	 * @param projectIdx 과목 번호
+	 * @return {@link List} {@link ScoringReadResponseBean}
+	 */
 	@Override
 	@Transactional
 	public List<ScoringReadResponseBean> readResults(int projectIdx, int userIdx) {
 		// TODO Auto-generated method stub
 		List<ProblemEntity> problems = problemDao
-				.findAllProblemListByProject(projectIdx);
+				.findAllProblemListByProject(projectIdx,true);
 		List<ScoringReadResponseBean> scoreReadBeanList = new ArrayList<ScoringReadResponseBean>();
 
 		for (int i = 0; i < problems.size(); i++) {
 
 			List<ScoringTotalEntity> entitys = scoringDao
-					.findScoringTotalResult(userIdx, problems.get(i)
+					.findScoringResult(userIdx, problems.get(i)
 							.getProblemIdx());
 			if (entitys != null && !entitys.isEmpty()) {
 				ScoringReadResponseBean scoreReadBean = new ScoringReadResponseBean();

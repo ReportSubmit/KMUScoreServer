@@ -5,6 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
+/**
+ * 채점 결과를 담고 있는 클래스
+ * @author WJ
+ *
+ */
 @Scope(value=ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ScoringResultBean{
 	private int no;

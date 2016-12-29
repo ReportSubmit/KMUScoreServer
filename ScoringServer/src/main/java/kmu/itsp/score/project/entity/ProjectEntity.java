@@ -7,6 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * ProjectEntity
+ * DB table tb_project의 entity이다.
+ * @author WJ
+ *
+ */
+
 @Entity
 @Table(name = "tb_project")
 public class ProjectEntity implements Serializable {

@@ -7,6 +7,12 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+/**
+ * GCC를 이용하여 C언어 소스코드를 컴파일 및 실행시키는 클래스
+ * @author WJ
+ *
+ */
+
 @Service(value = "GccProcessService")
 public class GccProcessServiceImpl extends AbstractProcessService {
 	
@@ -15,12 +21,17 @@ public class GccProcessServiceImpl extends AbstractProcessService {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * C언어 소스코드를 컴파일한 결과를 정리하여 리턴 객체에 넣어 반환하는 메소드
+	 * @param compileFile - c언어 소스코드
+	 * @return CompileResultBean
+	 */
 	@Override
-	public CompileResultBean complie(File compileFile) throws IOException {
+	public CompileResultBean compile(File compileFile) throws IOException {
 		// TODO Auto-generated method stub
 		
-		String excuteFileName = UUID.randomUUID().toString();
-		int status=runComplier(compileFile, excuteFileName);
+		String executableFileName = UUID.randomUUID().toString();
+		int status=runCompiler(compileFile, executableFileName);
 		
 		if (!checkStatus(status)) {
 			status = IProcessService.COMPILE_ERROR;
@@ -30,38 +41,24 @@ public class GccProcessServiceImpl extends AbstractProcessService {
 		
 		String filePath=compileFile.getCanonicalPath().replace(compileFile.getName(), "");
 	
-		return new CompileResultBean(status, excuteFileName, filePath);
+		return new CompileResultBean(status, executableFileName, filePath);
 
 	}
-	@Override
-	public int runExcuteFile(File inputFile, String filePath){
-		int status;
-		// status == AbstractComplier.SUCCESS
-		List<String> execCommands = createCommand(filePath);
-		
-		status = excuteCommand(execCommands, 2, inputFile);
-		
-		return status;
-	}
 	
-	@Override
-	public int runExcuteFile(String input, String filePath) {
-		// TODO Auto-generated method stub
-		int status;
-		List<String> execCommands = createCommand(filePath);
-		
-		status = excuteCommand(execCommands, input, 2);
-		
-		return status;
-	}
 	
+	/**
+	 * 실제 컴파일을 실행하는 메소드
+	 * @param compileFile - c언어 소스코드
+	 * @param fileName - 생성될 파일 이름
+	 * @return status - 실행한 후 상태
+	 */
 	@Override
-	public int runComplier(File compileFile, String fileName) throws IOException{
+	public int runCompiler(File compileFile, String fileName) throws IOException{
 		String filePath = compileFile.getCanonicalPath().replace(compileFile.getName(), "");
 		List<String> complieCommands = createCommand("gcc", compileFile.getCanonicalPath(),
 				"-o", filePath+fileName, "-lm", "--static");
 
-		int status = excuteCommand(complieCommands, 2, null);
+		int status = executeCommand(complieCommands, 2, null);
 		
 		return status;
 		

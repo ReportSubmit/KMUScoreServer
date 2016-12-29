@@ -14,9 +14,19 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 사용자에 대한 정보가 담긴 DB에 access하는 Repository 클래스
+ * @author WJ
+ *
+ */
 @Repository
 public class UserInfoDAOImpl extends CommonDAOImpl implements UserInfoDAO {
 
+	/**
+	 * 사용자아이디에 해당하는 사용자정보를 반환하는 메소드
+	 * @param userID 사용자 아이디
+	 * @return {@link UserInfoEntity}
+	 */
 	@Override
 	@Transactional
 	public UserInfoEntity findUserById(String userID) {
@@ -29,6 +39,13 @@ public class UserInfoDAOImpl extends CommonDAOImpl implements UserInfoDAO {
 		return entity;
 	}
 
+	/**
+	 * 사용자 정보를 DB에 저장하는 메소드
+	 * @param projectIdx 과목 번호
+	 * @param userID 사용자 아이디
+	 * @param userPwd 사용자 비밀번호
+	 * @return true or exception
+	 */
 	@Override
 	public boolean registUser(Integer projectIdx, String userID, String userPwd) {
 		// TODO Auto-generated method stub
@@ -43,6 +60,10 @@ public class UserInfoDAOImpl extends CommonDAOImpl implements UserInfoDAO {
 		return true;
 	}
 
+	/**
+	 * 등록된 사용자 번호 중 가장 마지막 번호를 반환한다.
+	 * @return int - 등록된 사용자의 마지막 사용자 번호 없으면 0을 리턴
+	 */
 	@Override
 	public int getLastUserIdx() {
 		SQLQuery query = getSession()
@@ -56,6 +77,11 @@ public class UserInfoDAOImpl extends CommonDAOImpl implements UserInfoDAO {
 		}
 	}
 
+	/**
+	 * 과목 번호에 해당하는 사용자의 아이디, 사용자 번호를 DB에서 찾아 반환한다.
+	 * @param projectIdx 쿼리문 조건에 사용 될 과목 번호
+	 * @return {@link List} {@link UserIDEntity}
+	 */
 	@Override
 	public List<UserIDEntity> findUserIDList(Integer projectIdx) {
 		// TODO Auto-generated method stub

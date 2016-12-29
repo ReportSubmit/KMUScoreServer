@@ -1,7 +1,11 @@
 package kmu.itsp.score.scoring;
 
 import org.springframework.web.multipart.MultipartFile;
-
+/**
+ * 채점에 필요한 정보를 담고 있는 클래스 
+ * @author WJ
+ *
+ */
 public class ScoringRequestInfoBean {
 
 	private Integer problemIdx;
