@@ -296,10 +296,9 @@ public class ScoringServiceImpl implements ScoringService {
 	 */
 	@Override
 	@Transactional
-	public List<ScoringReadResponseBean> readResults(int projectIdx, int userIdx) {
+	public List<ScoringReadResponseBean> readResults(int projectIdx, int userIdx,List<ProblemEntity> problems) {
 		// TODO Auto-generated method stub
-		List<ProblemEntity> problems = problemDao
-				.findAllProblemListByProject(projectIdx,true);
+		
 		List<ScoringReadResponseBean> scoreReadBeanList = new ArrayList<ScoringReadResponseBean>();
 
 		for (int i = 0; i < problems.size(); i++) {
