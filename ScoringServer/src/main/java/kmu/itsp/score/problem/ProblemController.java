@@ -71,7 +71,7 @@ public class ProblemController {
 
 		if (problemService.registProblem(problemInfo, compilerIdx)) {
 			// go to read problem page
-			return "redirect:/read/problems";
+			return "forward:/read/problems";
 		}
 
 		return "problem/ProblemUpload";
