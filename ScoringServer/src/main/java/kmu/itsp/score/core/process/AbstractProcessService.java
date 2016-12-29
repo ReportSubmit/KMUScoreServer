@@ -144,21 +144,19 @@ public abstract class AbstractProcessService implements IProcessService {
 				writer.write(input);
 				writer.flush();
 				pb.redirectInput(file);
-
+				return runProcess(pb, limitTime);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-
+				return EXEC_ERROR;
 			} finally {
 				if (file != null && file.exists()) {
 					file.delete();
 				}
 			}
-		}
-
-		int status = runProcess(pb, limitTime);
-
-		return status;
+		}else{
+			return runProcess(pb, limitTime);	
+		}		
 
 	}
 

@@ -106,7 +106,7 @@ public class ProblemServiceImpl implements ProblemService {
 					int status = processService.runExecutableFile(inputs[i],
 							compileResult.getExcuteFile().getCanonicalPath());
 
-//					System.out.println("status:" + status);
+//					System.out.println("excute status:" + status);
 
 					if (status == IProcessService.EXEC_SUCCESS) {
 
@@ -133,12 +133,14 @@ public class ProblemServiceImpl implements ProblemService {
 
 					} else {
 						// excute error
-						return false;
+						throw new HibernateException("종료");
+						
 					}
 				}
 			} else {
 				// compile error
-				return false;
+				throw new HibernateException("종료");
+				
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
