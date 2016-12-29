@@ -7,6 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * UserIDEntity
+ * DB table tb_user의 entity이다.
+ * 
+ * @author WJ
+ *
+ */
+
 @Entity
 @Table(name = "tb_user")
 public class UserInfoEntity implements Serializable {

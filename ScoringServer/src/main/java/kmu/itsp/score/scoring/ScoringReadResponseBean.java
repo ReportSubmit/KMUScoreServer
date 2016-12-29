@@ -4,6 +4,11 @@ import java.util.List;
 
 import kmu.itsp.score.scoring.entity.ScoringTotalEntity;
 
+/**
+ * 문제 풀이페이지의 해당 문제 번호의 채점 정보를 담는 클래스
+ * @author WJ
+ *
+ */
 public class ScoringReadResponseBean {
 	int problemIdx;
 	List<ScoringTotalEntity> infos;

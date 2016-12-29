@@ -6,7 +6,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
+/**
+ * ScoringResultEntity
+ * DB table tb_result의 entity이다.
+ * @author WJ
+ *
+ */
 @Entity
 @Table(name = "tb_result")
 public class ScoringResultEntity implements Serializable {

@@ -13,9 +13,6 @@ public interface ScoringDAO extends CommonDAO {
 	boolean addTotalScore(int userIdx, Integer problemIdx, int totalScore);
 
 	List<ScoringTotalEntity> findScoringResult(int userIdx, int problemIdx);
-
-	List<ScoringTotalEntity> findScoringTotalResult(int userIdx,
-			int problemIdx);
 	
 
 }

@@ -1,0 +1,15 @@
+kmu.itsp.score.core.checker
+kmu.itsp.score.core.dao
+kmu.itsp.score.core.process
+kmu.itsp.score.core.util
+kmu.itsp.score.export
+kmu.itsp.score.initctrl
+kmu.itsp.score.problem
+kmu.itsp.score.problem.entity
+kmu.itsp.score.project
+kmu.itsp.score.project.entity
+kmu.itsp.score.scoring
+kmu.itsp.score.scoring.entity
+kmu.itsp.score.scoring.temp
+kmu.itsp.score.user
+kmu.itsp.score.user.entity

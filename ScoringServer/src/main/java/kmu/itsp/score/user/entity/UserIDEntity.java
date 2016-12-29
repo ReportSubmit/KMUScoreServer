@@ -7,6 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * UserIDEntity
+ * DB table tb_user 중 사용자 번호, 과목 번호, 사용자 아이디를 담는 entity이다.
+ * 
+ * @author WJ
+ *
+ */
 @Entity
 @Table(name = "tb_user")
 public class UserIDEntity implements Serializable {

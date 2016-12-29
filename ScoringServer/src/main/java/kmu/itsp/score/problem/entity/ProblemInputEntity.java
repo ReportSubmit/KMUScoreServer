@@ -7,11 +7,18 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * ProblemEntity
+ * DB table tb_input의 entity이다.
+ * @author WJ
+ *
+ */
+
 @Entity
 @Table(name="tb_input")
 public class ProblemInputEntity implements Serializable{
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8011115418749166701L;
 	
 	@Id
 	@Column(name = "problem_idx", nullable=false, unique=true)
