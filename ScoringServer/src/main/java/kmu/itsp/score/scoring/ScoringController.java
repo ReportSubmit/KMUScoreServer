@@ -1,7 +1,11 @@
 package kmu.itsp.score.scoring;
 
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import kmu.itsp.score.problem.entity.ProblemEntity;
 import kmu.itsp.score.user.ScoreUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +102,7 @@ public class ScoringController {
 	 * @return {@link String} 문제 풀기 페이지 jsp 파일 이름
 	 */
 	@RequestMapping(value = "/read/scoring/all", method = RequestMethod.GET)
-	public String readScoringResults(Model model) {
+	public String readScoringResults(HttpServletRequest request,Model model) {
 
 		Object principal = SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
@@ -107,9 +111,11 @@ public class ScoringController {
 		if (principal instanceof ScoreUser) {
 			userDetail = (ScoreUser) principal;
 		}
-
+		
+		List<ProblemEntity> problemList=(List<ProblemEntity>) request.getAttribute("problemList");
+		
 		List<ScoringReadResponseBean> scoreReadBeanList = scoreService
-				.readResults(userDetail.getProjectIdx(),userDetail.getUserIdx());
+				.readResults(userDetail.getProjectIdx(),userDetail.getUserIdx(),problemList);
 
 		model.addAttribute("scoreResults", scoreReadBeanList);
 
