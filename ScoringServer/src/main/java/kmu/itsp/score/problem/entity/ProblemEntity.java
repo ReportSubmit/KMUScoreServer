@@ -1,6 +1,7 @@
 package kmu.itsp.score.problem.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,6 +33,9 @@ public class ProblemEntity implements Serializable {
 	
 	@Column(name = "problem_contents", nullable=false)
 	private String problemContents;
+	
+	@Column(name = "problem_limit_time", nullable=true)
+	private Timestamp problemLimitTime;
 
 	public ProblemEntity() {
 		// TODO Auto-generated constructor stub
@@ -69,6 +73,13 @@ public class ProblemEntity implements Serializable {
 		this.problemContents = problemContents;
 	}
 	
+	public Timestamp getProblemLimitTime() {
+		return problemLimitTime;
+	}
+	public void setProblemLimitTime(Timestamp problemLimitTime) {
+		this.problemLimitTime = problemLimitTime;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
@@ -92,4 +103,6 @@ public class ProblemEntity implements Serializable {
 		// TODO Auto-generated method stub
 		return projectIdx * 10 + problemIdx * 100 + problemName.hashCode();
 	}
+
+	
 }

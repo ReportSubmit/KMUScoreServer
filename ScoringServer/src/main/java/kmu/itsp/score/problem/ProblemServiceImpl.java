@@ -51,7 +51,7 @@ public class ProblemServiceImpl implements ProblemService {
 		int nextProblemIdx = problemDao.getLastProblemIdx() + 1;
 
 		problemDao.addProblemEntity(problemInfo.getProjectIdx(), nextProblemIdx,
-				problemInfo.getProblemName(), problemInfo.getProblemContents());
+				problemInfo.getProblemName(), problemInfo.getProblemContents(), problemInfo.getLimitTime());
 
 //		System.out.println(nextProblemIdx);
 

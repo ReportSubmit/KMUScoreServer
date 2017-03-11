@@ -1,6 +1,7 @@
 package kmu.itsp.score.problem;
 
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.List;
 
 import kmu.itsp.score.core.dao.CommonDAOImpl;
@@ -31,13 +32,14 @@ public class ProblemDAOImpl extends CommonDAOImpl implements ProblemDAO {
 	 */
 	@Override
 	public boolean addProblemEntity(int projectIdx,int problemIdx, String problemName,
-			String problemContents) {
+			String problemContents, Timestamp limitTime) {
 
 		ProblemEntity entity = new ProblemEntity();
 		entity.setProjectIdx(projectIdx);
 		entity.setProblemIdx(problemIdx);
 		entity.setProblemName(problemName);
 		entity.setProblemContents(problemContents);
+		entity.setProblemLimitTime(limitTime);
 		persist(entity);
 		// insert problem entity
 
