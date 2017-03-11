@@ -28,6 +28,11 @@
 	href="<c:url value="/resources/css/label.css"/>">
 <link rel="stylesheet"
 	href="<c:url value="/resources/css/input.css"/>">
+	
+<link rel="stylesheet"
+	href="<c:url value="/resources/css/bootstrap-datetimepicker.min.css"/>">
+
+<script src="<c:url value="/resources/js/bootstrap-datetimepicker.min.js"/>"></script>
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -69,6 +74,9 @@
 			$(this).siblings('.upload-name').val(filename);
 	
 		});		
+		
+		//datetimepicker UI
+	    $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii:ss'});
 	});
 </script>
 <style type="text/css">
@@ -248,6 +256,12 @@
 							<input class="upload-name" value="파일선택" disabled="disabled">
 							<label for="ex_filename">찾기</label> <input type="file"
 								name="sourceFile" id="ex_filename" class="upload-hidden">
+						</div>
+					</div>
+					<div class="bs-callout bs-callout-primary">
+						<h4>제한 시간</h4>
+						<div>
+							<input name="limitTime" type="text" readonly class="form_datetime">
 						</div>
 					</div>
 					<div class="bs-callout bs-callout-danger">
