@@ -89,7 +89,7 @@ public class ProblemController {
 	 * @return String - redirect:/read/scoring/all 각 문제에 대해 현재 사용자가 풀이한 성적 정보를
 	 *         얻는 요청 URL로 리다이렉션
 	 */
-	@RequestMapping(value = "/read/problems", method = RequestMethod.GET)
+	@RequestMapping(value = "/read/problems", method = {RequestMethod.GET, RequestMethod.POST})
 	public String readProblems(
 			@RequestParam(value = "pageIdx", defaultValue = "1") int pageIdx,
 			@RequestParam(value = "listSize", defaultValue = "10") int listSize,
