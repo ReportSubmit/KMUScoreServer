@@ -101,7 +101,7 @@ public class ScoringController {
 	 * @param model -{@link List} {@link ScoringReadResponseBean}
 	 * @return {@link String} 문제 풀기 페이지 jsp 파일 이름
 	 */
-	@RequestMapping(value = "/read/scoring/all", method = RequestMethod.GET)
+	@RequestMapping(value = "/read/scoring/all", method = {RequestMethod.GET, RequestMethod.POST})
 	public String readScoringResults(HttpServletRequest request,Model model) {
 
 		Object principal = SecurityContextHolder.getContext()

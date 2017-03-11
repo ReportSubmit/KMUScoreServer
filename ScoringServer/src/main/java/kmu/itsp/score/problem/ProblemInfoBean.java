@@ -1,5 +1,7 @@
 package kmu.itsp.score.problem;
 
+import java.sql.Timestamp;
+
 import org.springframework.web.multipart.MultipartFile;
 /**
  * 문제에 대한 정보를 담고 있는 bean 클래스
@@ -23,6 +25,10 @@ public class ProblemInfoBean {
 	 * 문제 내용
 	 */
 	private String problemContents;
+	/**
+	 * 제한 시간
+	 */
+	private Timestamp limitTime;
 	/**
 	 * 각 테스트 케이스들
 	 */
@@ -78,5 +84,13 @@ public class ProblemInfoBean {
 
 	public void setProblemContents(String problemContents) {
 		this.problemContents = problemContents;
+	}
+
+	public Timestamp getLimitTime() {
+		return limitTime;
+	}
+
+	public void setLimitTime(Timestamp limitTime) {
+		this.limitTime = limitTime;
 	}
 }
